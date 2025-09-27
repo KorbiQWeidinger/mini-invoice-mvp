@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mini-Invoice MVP",
-  description: "A minimal viable product for invoice management with real-time preview and CRUD operations",
+  description:
+    "A minimal viable product for invoice management with real-time preview and CRUD operations",
 };
 
 export default function RootLayout({
