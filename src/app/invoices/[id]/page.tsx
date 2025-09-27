@@ -241,7 +241,7 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
         </main>
       </div>
     );
-  } catch (error) {
+  } catch {
     notFound();
   }
 }
