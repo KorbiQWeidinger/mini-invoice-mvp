@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { useBreakpoint } from "@/lib/hooks";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -44,6 +45,7 @@ export default function CommandPalette({
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const { isTablet } = useBreakpoint();
 
   const commands: Command[] = [
     // Navigation Commands
@@ -369,38 +371,40 @@ export default function CommandPalette({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between p-3 border-t border-border-primary text-xs text-text-tertiary">
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1">
-                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                  ↑↓
-                </kbd>
-                navigate
-              </span>
-              <span className="flex items-center gap-1">
-                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                  ↵
-                </kbd>
-                select
-              </span>
-              <span className="flex items-center gap-1">
-                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                  tab
-                </kbd>
-                filter
-              </span>
-              <span className="flex items-center gap-1">
-                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                  esc
-                </kbd>
-                close
-              </span>
+          {!isTablet && (
+            <div className="flex items-center justify-between p-3 border-t border-border-primary text-xs text-text-tertiary">
+              <div className="flex items-center gap-4">
+                <span className="flex items-center gap-1">
+                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                    ↑↓
+                  </kbd>
+                  navigate
+                </span>
+                <span className="flex items-center gap-1">
+                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                    ↵
+                  </kbd>
+                  select
+                </span>
+                <span className="flex items-center gap-1">
+                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                    tab
+                  </kbd>
+                  filter
+                </span>
+                <span className="flex items-center gap-1">
+                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                    esc
+                  </kbd>
+                  close
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Command className="w-3 h-3" />
+                <span>K</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Command className="w-3 h-3" />
-              <span>K</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>

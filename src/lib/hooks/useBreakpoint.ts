@@ -23,7 +23,7 @@ export function useBreakpoint(): BreakpointState {
 
       setBreakpoint({
         isMobile: width < 768, // md breakpoint
-        isTablet: width >= 768 && width < 1024, // md to lg breakpoint
+        isTablet: width < 1024, // md to lg breakpoint
         isLargeScreen: width >= 1024, // lg breakpoint and above
         width,
       });
