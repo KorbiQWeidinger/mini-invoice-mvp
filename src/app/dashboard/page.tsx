@@ -3,7 +3,12 @@ import { invoiceService } from "@/lib/database";
 import { FileText, CheckCircle, Send, Edit } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
+// Disable caching for this page to ensure fresh data
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardPage() {
+  // Force fresh data by disabling cache
   const invoices = await invoiceService.getAll();
 
   // Calculate statistics
