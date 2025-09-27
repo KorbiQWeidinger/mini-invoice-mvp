@@ -9,9 +9,13 @@ import {
   Shield,
   CreditCard,
 } from "lucide-react";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
+import ThemeSwitcherDropdown from "@/components/ThemeSwitcherDropdown";
+import { useSettings } from "@/components/SettingsProvider";
+import PageHeader from "@/components/PageHeader";
 
 export default function AccountPage() {
+  const { dockSettings, setDockSticky } = useSettings();
+
   // Mock user data - in a real app, this would come from auth context
   const user = {
     name: "John Doe",
@@ -48,14 +52,11 @@ export default function AccountPage() {
     <div className="min-h-screen bg-bg-primary">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">
-            Account Settings
-          </h1>
-          <p className="text-text-secondary">
-            Manage your account information, preferences, and billing details.
-          </p>
-        </div>
+        <PageHeader
+          title="Account Settings"
+          subtitle="Manage your account information, preferences, and billing details."
+          variant="centered"
+        />
 
         {/* User Profile Card */}
         <div className="bg-bg-secondary border border-border-primary rounded-xl p-6 mb-8">
@@ -79,7 +80,7 @@ export default function AccountPage() {
         </div>
 
         {/* Account Sections */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2">
           {accountSections.map((section) => {
             const Icon = section.icon;
             return (
@@ -130,7 +131,45 @@ export default function AccountPage() {
                 Changes apply immediately across the application
               </p>
             </div>
-            <ThemeSwitcher />
+            <ThemeSwitcherDropdown />
+          </div>
+        </div>
+
+        {/* Dock Navigation Settings */}
+        <div className="bg-bg-secondary border border-border-primary rounded-xl p-6 mt-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Settings className="w-5 h-5 text-brand-primary" />
+            <h3 className="text-lg font-semibold text-text-primary">
+              Dock Navigation
+            </h3>
+          </div>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-sm font-medium text-text-primary">
+                  Sticky Dock
+                </p>
+                <p className="text-xs text-text-secondary">
+                  Keep the dock navigation always visible
+                </p>
+              </div>
+              <button
+                onClick={() => setDockSticky(!dockSettings.isSticky)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 ${
+                  dockSettings.isSticky ? "bg-brand-primary" : "bg-bg-hover"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    dockSettings.isSticky ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+            <div className="text-xs text-text-tertiary">
+              On small screens, the dock is always sticky but can be collapsed
+              using the toggle button.
+            </div>
           </div>
         </div>
 

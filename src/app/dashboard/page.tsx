@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { invoiceService } from "@/lib/database";
 import { FileText, CheckCircle, Send, Edit } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 
 export default async function DashboardPage() {
   const invoices = await invoiceService.getAll();
@@ -22,14 +23,10 @@ export default async function DashboardPage() {
   return (
     <div className="p-6">
       {/* Welcome Section */}
-      <div className="flex-1 min-w-0">
-        <h2 className="text-2xl font-bold leading-7 text-text-primary sm:text-3xl sm:truncate">
-          Dashboard{" "}
-        </h2>
-        <p className="mt-1 text-sm text-text-secondary">
-          Manage your invoices and track payments with ease
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        subtitle="Manage your invoices and track payments with ease"
+      />
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {/* Total Invoices */}

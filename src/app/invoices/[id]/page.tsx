@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { invoiceService, type InvoiceItem } from "@/lib/database";
 import { notFound } from "next/navigation";
+import PageHeader from "@/components/PageHeader";
 
 interface InvoiceDetailPageProps {
   params: Promise<{ id: string }>;
@@ -17,30 +18,28 @@ export default async function InvoiceDetailPage({
     return (
       <div className="p-6">
         {/* Page Header */}
-        <div className="md:flex md:items-center md:justify-between mb-8">
-          <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold leading-7 text-text-primary sm:text-3xl sm:truncate">
-              Invoice {invoice.invoice_number}
-            </h2>
-            <p className="mt-1 text-sm text-text-secondary">
-              Created on {new Date(invoice.created_at).toLocaleDateString()}
-            </p>
-          </div>
-          <div className="mt-4 flex md:mt-0 md:ml-4 space-x-3">
-            <Link
-              href={`/invoices/${invoice.id}/edit`}
-              className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-border-primary text-text-secondary bg-bg-primary hover:bg-bg-tertiary disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
-            >
-              Edit Invoice
-            </Link>
-            <Link
-              href="/invoices"
-              className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
-            >
-              Back to Invoices
-            </Link>
-          </div>
-        </div>
+        <PageHeader
+          title={`Invoice ${invoice.invoice_number}`}
+          subtitle={`Created on ${new Date(
+            invoice.created_at
+          ).toLocaleDateString()}`}
+          actions={
+            <div className="flex space-x-3">
+              <Link
+                href={`/invoices/${invoice.id}/edit`}
+                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-border-primary text-text-secondary bg-bg-primary hover:bg-bg-tertiary disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+              >
+                Edit Invoice
+              </Link>
+              <Link
+                href="/invoices"
+                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+              >
+                Back to Invoices
+              </Link>
+            </div>
+          }
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Invoice Details */}
