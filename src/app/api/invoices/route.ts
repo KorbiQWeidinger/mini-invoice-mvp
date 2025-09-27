@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { invoiceService } from "@/lib/database";
 
+// Disable caching for API routes
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/invoices - List all invoices
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +18,14 @@ export async function GET(request: NextRequest) {
       invoices = await invoiceService.getAll();
     }
 
-    return NextResponse.json({ invoices });
+    // Add cache-busting headers
+    const response = NextResponse.json({ invoices });
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
+    response.headers.set('Surrogate-Control', 'no-store');
+    
+    return response;
   } catch (error) {
     console.error("Error fetching invoices:", error);
     return NextResponse.json(

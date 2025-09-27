@@ -19,7 +19,8 @@ export const invoiceService = {
     const { data, error } = await supabase
       .from("invoices")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .abortSignal(AbortSignal.timeout(10000)); // Add timeout to prevent hanging
 
     if (error) throw error;
     return data;

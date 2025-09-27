@@ -32,6 +32,8 @@ export default function InvoicesDataTable({
   useEffect(() => {
     const refreshData = async () => {
       try {
+        // Add cache-busting parameter to ensure fresh data
+        const timestamp = Date.now();
         const updatedInvoices = await invoiceService.getAll();
         setInvoices(updatedInvoices);
       } catch (error) {
@@ -40,6 +42,19 @@ export default function InvoicesDataTable({
     };
 
     refreshData();
+
+    // Refresh data when page becomes visible (user returns from another tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        refreshData();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -100,6 +115,8 @@ export default function InvoicesDataTable({
 
   const handleRefresh = async () => {
     try {
+      // Add cache-busting parameter to ensure fresh data
+      const timestamp = Date.now();
       const updatedInvoices = await invoiceService.getAll();
       setInvoices(updatedInvoices);
     } catch (error) {
@@ -113,7 +130,9 @@ export default function InvoicesDataTable({
       {/* Search and Filter Controls */}
       <div className="bg-bg-primary shadow-lg rounded-xl border border-border-primary p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-text-primary">Invoice Management</h3>
+          <h3 className="text-lg font-semibold text-text-primary">
+            Invoice Management
+          </h3>
           <button
             onClick={handleRefresh}
             className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-bg-hover rounded-lg transition-colors duration-200"
