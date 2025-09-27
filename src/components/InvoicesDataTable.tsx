@@ -18,6 +18,11 @@ export default function InvoicesDataTable({
   const [statusFilter, setStatusFilter] = useState("");
   const [filteredInvoices, setFilteredInvoices] =
     useState<Invoice[]>(initialInvoices);
+
+  // Debug logging
+  console.log("InvoicesDataTable - initialInvoices:", initialInvoices.length);
+  console.log("InvoicesDataTable - invoices:", invoices.length);
+  console.log("InvoicesDataTable - filteredInvoices:", filteredInvoices.length);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     invoiceId: string | null;

@@ -6,6 +6,10 @@ import PageHeader from "@/components/PageHeader";
 
 export default async function InvoicesPage() {
   const invoices = await invoiceService.getAll();
+  
+  // Debug logging
+  console.log("InvoicesPage - invoices count:", invoices.length);
+  console.log("InvoicesPage - invoices:", invoices.map(inv => ({ id: inv.id, invoice_number: inv.invoice_number })));
 
   return (
     <div className="p-6">
