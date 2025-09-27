@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PrelineScript from "@/components/PrelineScript";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import DockNavigation from "@/components/DockNavigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          {children}
+          <div className="min-h-screen bg-bg-primary">
+            <main className="pb-20">{children}</main>
+            <DockNavigation />
+          </div>
           <PrelineScript />
         </ThemeProvider>
       </body>
