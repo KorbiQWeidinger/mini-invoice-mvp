@@ -6,12 +6,14 @@ interface InvoiceDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function InvoiceDetailPage({ params }: InvoiceDetailPageProps) {
+export default async function InvoiceDetailPage({
+  params,
+}: InvoiceDetailPageProps) {
   const { id } = await params;
-  
+
   try {
     const invoice = await invoiceService.getById(id);
-    
+
     return (
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
@@ -81,15 +83,25 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                     </h3>
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Name</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{invoice.customer_name}</dd>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Name
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                          {invoice.customer_name}
+                        </dd>
                       </div>
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Email</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{invoice.customer_email || "N/A"}</dd>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Email
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                          {invoice.customer_email || "N/A"}
+                        </dd>
                       </div>
                       <div className="sm:col-span-2">
-                        <dt className="text-sm font-medium text-gray-500">Address</dt>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Address
+                        </dt>
                         <dd className="mt-1 text-sm text-gray-900">
                           {invoice.customer_address || "N/A"}
                         </dd>
@@ -106,11 +118,17 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                     </h3>
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Invoice Number</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{invoice.invoice_number}</dd>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Invoice Number
+                        </dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                          {invoice.invoice_number}
+                        </dd>
                       </div>
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Status</dt>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Status
+                        </dt>
                         <dd className="mt-1">
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -128,13 +146,17 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Issue Date</dt>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Issue Date
+                        </dt>
                         <dd className="mt-1 text-sm text-gray-900">
                           {new Date(invoice.issue_date).toLocaleDateString()}
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-sm font-medium text-gray-500">Due Date</dt>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Due Date
+                        </dt>
                         <dd className="mt-1 text-sm text-gray-900">
                           {new Date(invoice.due_date).toLocaleDateString()}
                         </dd>
@@ -164,7 +186,8 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                     <h3 className="text-lg font-medium text-gray-900 mb-4">
                       Invoice Items
                     </h3>
-                    {invoice.invoice_items && invoice.invoice_items.length > 0 ? (
+                    {invoice.invoice_items &&
+                    invoice.invoice_items.length > 0 ? (
                       <div className="overflow-hidden">
                         <table className="min-w-full divide-y divide-gray-200">
                           <thead className="bg-gray-50">
@@ -204,7 +227,9 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                         </table>
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-500">No items found for this invoice.</p>
+                      <p className="text-sm text-gray-500">
+                        No items found for this invoice.
+                      </p>
                     )}
                   </div>
                 </div>
@@ -217,17 +242,25 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                     </h3>
                     <dl className="space-y-3">
                       <div className="flex justify-between">
-                        <dt className="text-sm font-medium text-gray-500">Subtotal</dt>
-                        <dd className="text-sm text-gray-900">${invoice.subtotal.toFixed(2)}</dd>
+                        <dt className="text-sm font-medium text-gray-500">
+                          Subtotal
+                        </dt>
+                        <dd className="text-sm text-gray-900">
+                          ${invoice.subtotal.toFixed(2)}
+                        </dd>
                       </div>
                       <div className="flex justify-between">
                         <dt className="text-sm font-medium text-gray-500">
                           Tax ({invoice.tax_rate}%)
                         </dt>
-                        <dd className="text-sm text-gray-900">${invoice.tax_amount.toFixed(2)}</dd>
+                        <dd className="text-sm text-gray-900">
+                          ${invoice.tax_amount.toFixed(2)}
+                        </dd>
                       </div>
                       <div className="flex justify-between border-t border-gray-200 pt-3">
-                        <dt className="text-base font-medium text-gray-900">Total</dt>
+                        <dt className="text-base font-medium text-gray-900">
+                          Total
+                        </dt>
                         <dd className="text-base font-medium text-gray-900">
                           ${invoice.total_amount.toFixed(2)}
                         </dd>
