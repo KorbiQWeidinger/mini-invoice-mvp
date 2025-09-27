@@ -1,76 +1,66 @@
 "use client";
 
 import { useTheme } from "./ThemeProvider";
-import type { ColorScheme } from "./ThemeProvider";
+import { Sun, Moon, Coffee, ChevronDown } from "lucide-react";
 
 export default function ThemeSwitcher() {
-  const { theme, colorScheme, toggleTheme, setColorScheme } = useTheme();
+  const { theme, setTheme, toggleTheme } = useTheme();
+
+  const themes = [
+    { value: "light", label: "Light", icon: Sun },
+    { value: "coffee", label: "Coffee", icon: Coffee },
+    { value: "dark", label: "Dark", icon: Moon },
+  ] as const;
+
+  const currentTheme = themes.find((t) => t.value === theme);
+  const CurrentIcon = currentTheme?.icon || Sun;
 
   return (
-    <div className="flex items-center space-x-4">
-      {/* Color Scheme Selector */}
-      <div className="relative">
-        <select
-          value={colorScheme}
-          onChange={(e) => setColorScheme(e.target.value as ColorScheme)}
-          className="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+    <div className="flex items-center space-x-2">
+      {/* Theme Selector Dropdown */}
+      <div className="hs-dropdown relative inline-flex">
+        <button
+          id="hs-dropdown-theme"
+          type="button"
+          className="hs-dropdown-toggle py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-border-primary bg-bg-primary text-text-primary shadow-sm hover:bg-bg-hover focus:outline-none focus:ring-2 focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none"
         >
-          <option value="blue">Blue</option>
-          <option value="green">Green</option>
-          <option value="purple">Purple</option>
-          <option value="orange">Orange</option>
-          <option value="red">Red</option>
-        </select>
-        <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-          <svg
-            className="w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          <CurrentIcon className="w-4 h-4" />
+          <span className="hidden sm:block">{currentTheme?.label}</span>
+          <ChevronDown className="hs-dropdown-open:rotate-180 w-4 h-4" />
+        </button>
+
+        <div
+          className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-bg-primary shadow-md rounded-lg p-2 mt-2 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="hs-dropdown-theme"
+        >
+          {themes.map((themeOption) => {
+            const IconComponent = themeOption.icon;
+            return (
+              <button
+                key={themeOption.value}
+                onClick={() => setTheme(themeOption.value)}
+                className={`w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-text-primary hover:bg-bg-hover focus:outline-none focus:ring-2 focus:ring-brand-primary ${
+                  theme === themeOption.value ? "bg-bg-hover" : ""
+                }`}
+              >
+                <IconComponent className="w-4 h-4" />
+                {themeOption.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Theme Toggle Button */}
+      {/* Quick Toggle Button */}
       <button
         onClick={toggleTheme}
-        className="relative inline-flex items-center justify-center w-12 h-6 bg-gray-200 dark:bg-gray-700 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+        className="relative inline-flex items-center justify-center w-10 h-10 bg-bg-secondary hover:bg-bg-hover rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+        aria-label={`Switch theme (current: ${theme})`}
+        title={`Current: ${currentTheme?.label}`}
       >
-        <span
-          className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
-            theme === "dark" ? "translate-x-6" : "translate-x-0"
-          }`}
-        >
-          {theme === "light" ? (
-            <svg
-              className="w-3 h-3 text-yellow-500 mt-0.5 ml-0.5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                clipRule="evenodd"
-              />
-            </svg>
-          ) : (
-            <svg
-              className="w-3 h-3 text-gray-700 mt-0.5 ml-0.5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-            </svg>
-          )}
-        </span>
+        <CurrentIcon className="w-4 h-4" />
       </button>
     </div>
   );

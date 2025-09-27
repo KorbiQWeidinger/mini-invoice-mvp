@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { invoiceService } from "@/lib/database";
 import Header from "@/components/Header";
+import { FileText, CheckCircle, Send, Edit } from "lucide-react";
 
 export default async function DashboardPage() {
   const invoices = await invoiceService.getAll();
@@ -13,11 +14,14 @@ export default async function DashboardPage() {
 
   // Get recent invoices (last 3)
   const recentInvoices = invoices
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
     .slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-bg-secondary transition-colors duration-200">
       <Header />
 
       {/* Main Content */}
@@ -25,10 +29,10 @@ export default async function DashboardPage() {
         <div className="px-4 py-6 sm:px-0">
           {/* Welcome Section */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
               Welcome to Mini-Invoice MVP
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-text-secondary">
               Manage your invoices and track payments with ease
             </p>
           </div>
@@ -36,20 +40,20 @@ export default async function DashboardPage() {
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             {/* Total Invoices */}
-            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:shadow-xl">
+            <div className="bg-bg-primary overflow-hidden shadow-lg rounded-xl border border-border-primary transition-all duration-200 hover:shadow-xl">
               <div className="p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white text-lg font-medium">📄</span>
+                    <div className="w-12 h-12 bg-gradient-to-r from-icon-primary to-icon-primary-hover rounded-xl flex items-center justify-center shadow-lg">
+                      <FileText className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                      <dt className="text-sm font-medium text-text-secondary truncate">
                         Total Invoices
                       </dt>
-                      <dd className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <dd className="text-2xl font-bold text-text-primary">
                         {totalInvoices}
                       </dd>
                     </dl>
@@ -59,20 +63,20 @@ export default async function DashboardPage() {
             </div>
 
             {/* Paid Invoices */}
-            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:shadow-xl">
+            <div className="bg-bg-primary overflow-hidden shadow-lg rounded-xl border border-border-primary transition-all duration-200 hover:shadow-xl">
               <div className="p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white text-lg font-medium">✅</span>
+                    <div className="w-12 h-12 bg-gradient-to-r from-icon-success to-icon-success-hover rounded-xl flex items-center justify-center shadow-lg">
+                      <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                      <dt className="text-sm font-medium text-text-secondary truncate">
                         Paid Invoices
                       </dt>
-                      <dd className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <dd className="text-2xl font-bold text-text-primary">
                         {paidInvoices}
                       </dd>
                     </dl>
@@ -82,20 +86,20 @@ export default async function DashboardPage() {
             </div>
 
             {/* Sent Invoices */}
-            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:shadow-xl">
+            <div className="bg-bg-primary overflow-hidden shadow-lg rounded-xl border border-border-primary transition-all duration-200 hover:shadow-xl">
               <div className="p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white text-lg font-medium">📤</span>
+                    <div className="w-12 h-12 bg-gradient-to-r from-icon-warning to-icon-warning-hover rounded-xl flex items-center justify-center shadow-lg">
+                      <Send className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                      <dt className="text-sm font-medium text-text-secondary truncate">
                         Sent Invoices
                       </dt>
-                      <dd className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <dd className="text-2xl font-bold text-text-primary">
                         {sentInvoices}
                       </dd>
                     </dl>
@@ -105,20 +109,20 @@ export default async function DashboardPage() {
             </div>
 
             {/* Draft Invoices */}
-            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-200 hover:shadow-xl">
+            <div className="bg-bg-primary overflow-hidden shadow-lg rounded-xl border border-border-primary transition-all duration-200 hover:shadow-xl">
               <div className="p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-gray-500 to-gray-600 rounded-xl flex items-center justify-center shadow-lg">
-                      <span className="text-white text-lg font-medium">📝</span>
+                    <div className="w-12 h-12 bg-gradient-to-r from-icon-neutral to-icon-neutral-hover rounded-xl flex items-center justify-center shadow-lg">
+                      <Edit className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
+                      <dt className="text-sm font-medium text-text-secondary truncate">
                         Draft Invoices
                       </dt>
-                      <dd className="text-2xl font-bold text-gray-900 dark:text-white">
+                      <dd className="text-2xl font-bold text-text-primary">
                         {draftInvoices}
                       </dd>
                     </dl>
@@ -129,67 +133,70 @@ export default async function DashboardPage() {
           </div>
 
           {/* Recent Invoices */}
-          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="bg-bg-primary shadow-lg rounded-xl border border-border-primary">
             <div className="px-6 py-5 sm:p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg leading-6 font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg leading-6 font-semibold text-text-primary">
                   Recent Invoices
                 </h3>
                 <Link
                   href="/invoices"
-                  className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium transition-colors duration-200"
+                  className="text-brand-primary hover:text-brand-primary-hover text-sm font-medium transition-colors duration-200"
                 >
                   View all invoices →
                 </Link>
               </div>
-              
+
               {recentInvoices.length > 0 ? (
                 <div className="overflow-hidden">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead className="bg-gray-50 dark:bg-gray-700">
+                  <table className="min-w-full divide-y divide-border-primary">
+                    <thead className="bg-bg-tertiary">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                           Invoice #
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                           Customer
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                           Date
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                           Amount
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
                           Status
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    <tbody className="bg-bg-primary divide-y divide-border-primary">
                       {recentInvoices.map((invoice) => (
-                        <tr key={invoice.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                        <tr
+                          key={invoice.id}
+                          className="hover:bg-bg-hover transition-colors duration-150"
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                             {invoice.invoice_number}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                             {invoice.customer_name}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                             {new Date(invoice.issue_date).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                             ${invoice.total_amount.toFixed(2)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
                               className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
                                 invoice.status === "paid"
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                  ? "bg-success-bg text-success-text"
                                   : invoice.status === "sent"
-                                  ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                  ? "bg-info-bg text-info-text"
                                   : invoice.status === "draft"
-                                  ? "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-                                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                  ? "bg-bg-tertiary text-text-secondary"
+                                  : "bg-error-bg text-error-text"
                               }`}
                             >
                               {invoice.status}
@@ -202,12 +209,12 @@ export default async function DashboardPage() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-text-secondary">
                     No invoices found. Create your first invoice to get started.
                   </p>
                   <Link
-                    href="/invoices/new"
-                    className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200"
+                    href="/invoices"
+                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-white hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
                   >
                     Create Invoice
                   </Link>

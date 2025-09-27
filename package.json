@@ -9,9 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@preline/theme-switch": "^3.2.3",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.58.0",
     "@tailwindcss/forms": "^0.5.10",
+    "lucide-react": "^0.544.0",
     "next": "15.5.4",
     "preline": "^3.2.3",
     "react": "19.1.0",
