@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import { supabaseAdmin } from "./supabase-admin";
+// import { supabaseAdmin } from "./supabase-admin"; // Will be used in future features
 import type { Database } from "./supabase";
 
 // Type aliases for easier usage

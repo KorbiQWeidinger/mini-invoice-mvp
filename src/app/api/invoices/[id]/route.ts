@@ -4,10 +4,11 @@ import { invoiceService } from "@/lib/database";
 // GET /api/invoices/[id] - Get single invoice
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const invoice = await invoiceService.getById(params.id);
+    const { id } = await params;
+    const invoice = await invoiceService.getById(id);
     return NextResponse.json({ invoice });
   } catch (error) {
     console.error("Error fetching invoice:", error);
@@ -18,11 +19,12 @@ export async function GET(
 // PUT /api/invoices/[id] - Update invoice
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const invoice = await invoiceService.update(params.id, body);
+    const invoice = await invoiceService.update(id, body);
 
     return NextResponse.json({ invoice });
   } catch (error) {
@@ -37,10 +39,11 @@ export async function PUT(
 // DELETE /api/invoices/[id] - Delete invoice
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await invoiceService.delete(params.id);
+    const { id } = await params;
+    await invoiceService.delete(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting invoice:", error);
