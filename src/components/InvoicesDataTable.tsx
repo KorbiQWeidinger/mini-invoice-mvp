@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { invoiceService, type Invoice } from "@/lib/database";
 import ConfirmModal from "./ConfirmModal";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, RefreshCw } from "lucide-react";
 
 interface InvoicesDataTableProps {
   initialInvoices: Invoice[];
@@ -18,11 +18,6 @@ export default function InvoicesDataTable({
   const [statusFilter, setStatusFilter] = useState("");
   const [filteredInvoices, setFilteredInvoices] =
     useState<Invoice[]>(initialInvoices);
-
-  // Debug logging
-  console.log("InvoicesDataTable - initialInvoices:", initialInvoices.length);
-  console.log("InvoicesDataTable - invoices:", invoices.length);
-  console.log("InvoicesDataTable - filteredInvoices:", filteredInvoices.length);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     invoiceId: string | null;
@@ -32,6 +27,20 @@ export default function InvoicesDataTable({
     invoiceId: null,
     invoiceNumber: "",
   });
+
+  // Refresh data when component mounts or when returning from other pages
+  useEffect(() => {
+    const refreshData = async () => {
+      try {
+        const updatedInvoices = await invoiceService.getAll();
+        setInvoices(updatedInvoices);
+      } catch (error) {
+        console.error("Error refreshing invoices:", error);
+      }
+    };
+
+    refreshData();
+  }, []);
 
   useEffect(() => {
     let filtered = invoices;
@@ -89,10 +98,31 @@ export default function InvoicesDataTable({
     }
   };
 
+  const handleRefresh = async () => {
+    try {
+      const updatedInvoices = await invoiceService.getAll();
+      setInvoices(updatedInvoices);
+    } catch (error) {
+      console.error("Error refreshing invoices:", error);
+      alert("Failed to refresh invoices");
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Search and Filter Controls */}
       <div className="bg-bg-primary shadow-lg rounded-xl border border-border-primary p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-text-primary">Invoice Management</h3>
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-bg-hover rounded-lg transition-colors duration-200"
+            title="Refresh invoices"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Refresh
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search Input */}
           <div>
