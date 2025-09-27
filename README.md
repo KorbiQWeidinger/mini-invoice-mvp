@@ -14,7 +14,7 @@ A minimal viable product for invoice management with real-time preview and CRUD 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Supabase account
 
@@ -37,6 +37,7 @@ cp .env.local.example .env.local
 ```
 
 Update `.env.local` with your Supabase credentials:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
@@ -52,6 +53,7 @@ Run the initial migration in your Supabase SQL editor:
 ```
 
 Or use the Supabase CLI:
+
 ```bash
 npx supabase init
 npx supabase db push
