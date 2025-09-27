@@ -119,7 +119,10 @@ export default async function DashboardPage() {
                         Draft Invoices
                       </dt>
                       <dd className="text-lg font-medium text-gray-900">
-                        {invoices.filter((inv) => inv.status === "draft").length}
+                        {
+                          invoices.filter((inv) => inv.status === "draft")
+                            .length
+                        }
                       </dd>
                     </dl>
                   </div>
