@@ -167,8 +167,9 @@ export default function AccountPage() {
               </button>
             </div>
             <div className="text-xs text-text-tertiary">
-              On small screens, the dock is always sticky but can be collapsed
-              using the toggle button.
+              When enabled, the dock will always be visible at the bottom of the
+              screen. On mobile devices, the dock is always sticky regardless of
+              this setting.
             </div>
           </div>
         </div>

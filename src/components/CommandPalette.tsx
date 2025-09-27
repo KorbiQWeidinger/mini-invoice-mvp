@@ -398,7 +398,7 @@ export default function CommandPalette({
             </div>
             <div className="flex items-center gap-1">
               <Command className="w-3 h-3" />
-              <span>⌘K</span>
+              <span>K</span>
             </div>
           </div>
         </div>

@@ -5,7 +5,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface DockSettings {
   isSticky: boolean;
   isCollapsed: boolean;
-  isMobileDockOpen: boolean;
 }
 
 interface SettingsContextType {
@@ -13,8 +12,6 @@ interface SettingsContextType {
   setDockSticky: (isSticky: boolean) => void;
   setDockCollapsed: (isCollapsed: boolean) => void;
   toggleDockCollapsed: () => void;
-  setMobileDockOpen: (isOpen: boolean) => void;
-  toggleMobileDock: () => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(
@@ -23,9 +20,8 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [dockSettings, setDockSettings] = useState<DockSettings>({
-    isSticky: false,
+    isSticky: true,
     isCollapsed: false,
-    isMobileDockOpen: true,
   });
 
   useEffect(() => {
@@ -37,7 +33,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         setDockSettings({
           isSticky: parsed.isSticky ?? false,
           isCollapsed: parsed.isCollapsed ?? false,
-          isMobileDockOpen: parsed.isMobileDockOpen ?? false,
         });
       } catch (error) {
         console.error("Failed to parse dock settings:", error);
@@ -62,17 +57,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setDockSettings((prev) => ({ ...prev, isCollapsed: !prev.isCollapsed }));
   };
 
-  const setMobileDockOpen = (isOpen: boolean) => {
-    setDockSettings((prev) => ({ ...prev, isMobileDockOpen: isOpen }));
-  };
-
-  const toggleMobileDock = () => {
-    setDockSettings((prev) => ({
-      ...prev,
-      isMobileDockOpen: !prev.isMobileDockOpen,
-    }));
-  };
-
   return (
     <SettingsContext.Provider
       value={{
@@ -80,8 +64,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         setDockSticky,
         setDockCollapsed,
         toggleDockCollapsed,
-        setMobileDockOpen,
-        toggleMobileDock,
       }}
     >
       {children}
