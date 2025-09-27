@@ -45,7 +45,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 bg-gradient-to-r from-icon-primary to-icon-primary-hover rounded-xl flex items-center justify-center shadow-lg">
-                      <FileText className="w-6 h-6 text-white" />
+                      <FileText className="w-6 h-6 text-text-on-primary" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
@@ -68,7 +68,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 bg-gradient-to-r from-icon-success to-icon-success-hover rounded-xl flex items-center justify-center shadow-lg">
-                      <CheckCircle className="w-6 h-6 text-white" />
+                      <CheckCircle className="w-6 h-6 text-text-on-success" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 bg-gradient-to-r from-icon-warning to-icon-warning-hover rounded-xl flex items-center justify-center shadow-lg">
-                      <Send className="w-6 h-6 text-white" />
+                      <Send className="w-6 h-6 text-text-on-warning" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
@@ -114,7 +114,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 bg-gradient-to-r from-icon-neutral to-icon-neutral-hover rounded-xl flex items-center justify-center shadow-lg">
-                      <Edit className="w-6 h-6 text-white" />
+                      <Edit className="w-6 h-6 text-text-on-primary" />
                     </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
@@ -214,7 +214,7 @@ export default async function DashboardPage() {
                   </p>
                   <Link
                     href="/invoices"
-                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-white hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
                   >
                     Create Invoice
                   </Link>

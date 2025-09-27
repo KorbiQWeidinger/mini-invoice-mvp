@@ -29,23 +29,27 @@ export default function ConfirmModal({
     switch (variant) {
       case "danger":
         return {
-          button: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-          icon: "text-red-600",
+          button: "bg-error hover:bg-error focus:ring-error",
+          icon: "text-error",
+          textColor: "text-text-on-error",
         };
       case "warning":
         return {
-          button: "bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500",
-          icon: "text-yellow-600",
+          button: "bg-warning hover:bg-warning focus:ring-warning",
+          icon: "text-warning",
+          textColor: "text-text-on-warning",
         };
       case "info":
         return {
-          button: "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500",
-          icon: "text-blue-600",
+          button: "bg-info hover:bg-info focus:ring-info",
+          icon: "text-info",
+          textColor: "text-text-on-primary",
         };
       default:
         return {
-          button: "bg-red-600 hover:bg-red-700 focus:ring-red-500",
-          icon: "text-red-600",
+          button: "bg-error hover:bg-error focus:ring-error",
+          icon: "text-error",
+          textColor: "text-text-on-error",
         };
     }
   };
@@ -96,7 +100,7 @@ export default function ConfirmModal({
             </button>
             <button
               type="button"
-              className={`py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white ${variantClasses.button} disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2`}
+              className={`py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent ${variantClasses.textColor} ${variantClasses.button} disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2`}
               onClick={onConfirm}
             >
               {confirmText}

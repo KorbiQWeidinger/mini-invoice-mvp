@@ -324,7 +324,7 @@ export default function CreateInvoicePage() {
                   <button
                     type="button"
                     onClick={addItem}
-                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-white hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
                   >
                     <Plus className="w-4 h-4 mr-1" />
                     Add Item
@@ -507,11 +507,11 @@ export default function CreateInvoicePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-white hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                    <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-text-on-primary" />
                     Creating...
                   </>
                 ) : (

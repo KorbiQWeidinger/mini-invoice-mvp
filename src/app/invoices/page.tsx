@@ -27,7 +27,7 @@ export default async function InvoicesPage() {
             <div className="mt-4 flex md:mt-0 md:ml-4">
               <Link
                 href="/invoices/new"
-                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-white hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Invoice
