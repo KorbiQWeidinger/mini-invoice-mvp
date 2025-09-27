@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 
 // Disable caching for this page to ensure fresh data
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function InvoicesPage() {
