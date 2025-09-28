@@ -16,7 +16,7 @@ interface PrelineCardProps {
 }
 
 function getVariantClasses(variant: string, hover: boolean) {
-  const baseClasses = "bg-bg-primary border border-border-primary rounded-xl";
+  const baseClasses = "bg-bg-secondary border border-border-primary rounded-xl";
 
   switch (variant) {
     case "elevated":
