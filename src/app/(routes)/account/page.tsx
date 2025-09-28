@@ -12,6 +12,9 @@ import {
 import ThemeSwitcherDropdown from "@/client/features/theme/ThemeSwitcherDropdown";
 import { useSettings } from "@/client/features/settings/SettingsProvider";
 import PageHeader from "@/client/common/components/PageHeader";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
+import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { PrelineToggle } from "@/client/common/components/ui/PrelineToggle";
 
 export default function AccountPage() {
   const { dockSettings, setDockSticky } = useSettings();
@@ -84,16 +87,13 @@ export default function AccountPage() {
           {accountSections.map((section) => {
             const Icon = section.icon;
             return (
-              <div
+              <PrelineCard
                 key={section.title}
-                className="bg-bg-secondary border border-border-primary rounded-xl p-6"
+                title={section.title}
+                icon={<Icon />}
+                iconColor="primary"
+                variant="outlined"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <Icon className="w-5 h-5 text-brand-primary" />
-                  <h3 className="text-lg font-semibold text-text-primary">
-                    {section.title}
-                  </h3>
-                </div>
                 <div className="space-y-3">
                   {section.items.map((item, index) => (
                     <div
@@ -109,19 +109,19 @@ export default function AccountPage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </PrelineCard>
             );
           })}
         </div>
 
         {/* Theme Settings */}
-        <div className="bg-bg-secondary border border-border-primary rounded-xl p-6 mt-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Palette className="w-5 h-5 text-brand-primary" />
-            <h3 className="text-lg font-semibold text-text-primary">
-              Theme Preferences
-            </h3>
-          </div>
+        <PrelineCard
+          title="Theme Preferences"
+          icon={<Palette />}
+          iconColor="primary"
+          variant="outlined"
+          className="mt-6"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-text-secondary mb-1">
@@ -133,55 +133,39 @@ export default function AccountPage() {
             </div>
             <ThemeSwitcherDropdown />
           </div>
-        </div>
+        </PrelineCard>
 
         {/* Dock Navigation Settings */}
-        <div className="bg-bg-secondary border border-border-primary rounded-xl p-6 mt-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Settings className="w-5 h-5 text-brand-primary" />
-            <h3 className="text-lg font-semibold text-text-primary">
-              Dock Navigation
-            </h3>
-          </div>
+        <PrelineCard
+          title="Dock Navigation"
+          icon={<Settings />}
+          iconColor="primary"
+          variant="outlined"
+          className="mt-6"
+        >
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-text-primary">
-                  Sticky Dock
-                </p>
-                <p className="text-xs text-text-secondary">
-                  Keep the dock navigation always visible
-                </p>
-              </div>
-              <button
-                onClick={() => setDockSticky(!dockSettings.isSticky)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full border border-border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 ${
-                  dockSettings.isSticky ? "bg-brand-primary" : "bg-bg-hover"
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    dockSettings.isSticky ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
-              </button>
-            </div>
+            <PrelineToggle
+              checked={dockSettings.isSticky}
+              onChange={setDockSticky}
+              label="Sticky Dock"
+              description="Keep the dock navigation always visible"
+            />
             <div className="text-xs text-text-tertiary">
               When enabled, the dock will always be visible at the bottom of the
               screen. On mobile devices, the dock is always sticky regardless of
               this setting.
             </div>
           </div>
-        </div>
+        </PrelineCard>
 
         {/* Security Settings */}
-        <div className="bg-bg-secondary border border-border-primary rounded-xl p-6 mt-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Shield className="w-5 h-5 text-brand-primary" />
-            <h3 className="text-lg font-semibold text-text-primary">
-              Security
-            </h3>
-          </div>
+        <PrelineCard
+          title="Security"
+          icon={<Shield />}
+          iconColor="primary"
+          variant="outlined"
+          className="mt-6"
+        >
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
@@ -192,9 +176,9 @@ export default function AccountPage() {
                   Last changed 3 months ago
                 </p>
               </div>
-              <button className="px-4 py-2 bg-brand-primary text-text-on-primary rounded-lg hover:bg-brand-primary-hover transition-colors">
+              <PrelineButton variant="secondary" size="sm">
                 Change Password
-              </button>
+              </PrelineButton>
             </div>
             <div className="flex justify-between items-center">
               <div>
@@ -205,19 +189,21 @@ export default function AccountPage() {
                   Add an extra layer of security
                 </p>
               </div>
-              <button className="px-4 py-2 border border-border-primary text-text-primary rounded-lg hover:bg-bg-hover transition-colors">
+              <PrelineButton variant="secondary" size="sm">
                 Enable 2FA
-              </button>
+              </PrelineButton>
             </div>
           </div>
-        </div>
+        </PrelineCard>
 
         {/* Danger Zone */}
-        <div className="bg-bg-secondary border border-red-200 rounded-xl p-6 mt-6">
-          <div className="flex items-center gap-3 mb-4">
-            <LogOut className="w-5 h-5 text-red-500" />
-            <h3 className="text-lg font-semibold text-red-500">Danger Zone</h3>
-          </div>
+        <PrelineCard
+          title="Danger Zone"
+          icon={<LogOut />}
+          iconColor="danger"
+          variant="outlined"
+          className="mt-6 border-red-200"
+        >
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <div>
@@ -228,9 +214,9 @@ export default function AccountPage() {
                   Sign out of your account on this device
                 </p>
               </div>
-              <button className="px-4 py-2 border border-red-200 text-red-500 rounded-lg hover:bg-red-50 transition-colors">
+              <PrelineButton variant="danger" size="sm">
                 Sign Out
-              </button>
+              </PrelineButton>
             </div>
             <div className="flex justify-between items-center">
               <div>
@@ -241,12 +227,12 @@ export default function AccountPage() {
                   Permanently delete your account and all data
                 </p>
               </div>
-              <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+              <PrelineButton variant="danger" size="sm">
                 Delete Account
-              </button>
+              </PrelineButton>
             </div>
           </div>
-        </div>
+        </PrelineCard>
       </div>
     </div>
   );

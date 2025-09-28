@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Search, ChevronDown, RefreshCw } from "lucide-react";
+import { PrelineInput } from "../PrelineInput";
+import { PrelineDropdown } from "../PrelineDropdown";
 import type { DataTableFiltersProps } from "./types";
 
 export default function DataTableFilters({
@@ -67,27 +69,12 @@ export default function DataTableFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {/* Search Input */}
         {searchable && (
-          <div>
-            <label
-              htmlFor="search"
-              className="block text-sm font-medium text-text-secondary mb-2"
-            >
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <Search className="flex-shrink-0 w-4 h-4 text-text-muted" />
-              </div>
-              <input
-                type="text"
-                id="search"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="py-2 px-4 ps-10 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary placeholder-text-muted"
-              />
-            </div>
-          </div>
+          <PrelineInput
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={handleSearch}
+            icon={<Search className="flex-shrink-0 w-4 h-4" />}
+          />
         )}
 
         {/* Dynamic Filters */}
@@ -102,58 +89,21 @@ export default function DataTableFilters({
               </label>
 
               {filter.type === "select" ? (
-                <div className="hs-dropdown relative inline-flex w-full">
-                  <button
-                    id={`hs-dropdown-${filter.key}`}
-                    type="button"
-                    className="hs-dropdown-toggle py-2 px-4 pe-9 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-border-primary bg-bg-primary text-text-primary shadow-sm hover:bg-bg-hover focus:outline-none focus:ring-2 focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none w-full justify-between"
-                  >
-                    {activeFilters[filter.key]
-                      ? filter.options?.find(
-                          (opt) => opt.value === activeFilters[filter.key]
-                        )?.label || activeFilters[filter.key]
-                      : `All ${filter.label}`}
-                    <ChevronDown className="hs-dropdown-open:rotate-180 w-4 h-4" />
-                  </button>
-
-                  <div
-                    className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-bg-primary shadow-md rounded-lg p-2 mt-2 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby={`hs-dropdown-${filter.key}`}
-                  >
-                    <button
-                      onClick={() => handleFilterChange(filter.key, "")}
-                      className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-text-primary hover:bg-bg-hover focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                    >
-                      All {filter.label}
-                    </button>
-                    {filter.options?.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() =>
-                          handleFilterChange(filter.key, option.value)
-                        }
-                        className="w-full flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-text-primary hover:bg-bg-hover focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <PrelineDropdown
+                  value={activeFilters[filter.key] || ""}
+                  onChange={(value) => handleFilterChange(filter.key, value)}
+                  options={filter.options || []}
+                  placeholder={`All ${filter.label}`}
+                />
               ) : (
-                <input
+                <PrelineInput
                   type={filter.type}
-                  id={filter.key}
                   placeholder={
                     filter.placeholder ||
                     `Filter by ${filter.label.toLowerCase()}...`
                   }
                   value={activeFilters[filter.key] || ""}
-                  onChange={(e) =>
-                    handleFilterChange(filter.key, e.target.value)
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary placeholder-text-muted"
+                  onChange={(value) => handleFilterChange(filter.key, value)}
                 />
               )}
             </div>

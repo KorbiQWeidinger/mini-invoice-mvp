@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   invoiceService,
   invoiceItemService,
@@ -9,8 +8,11 @@ import {
   type InvoiceItemInsert,
 } from "@/db/database";
 import { useRouter } from "next/navigation";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import PageHeader from "@/client/common/components/PageHeader";
+import { PrelineInput } from "@/client/common/components/ui/PrelineInput";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
+import { PrelineTextarea } from "@/client/common/components/ui/PrelineTextarea";
 
 interface InvoiceItem {
   id: string;
@@ -156,12 +158,9 @@ export default function CreateInvoicePage() {
         title="Create Invoice"
         subtitle="Create a new invoice for your customer"
         actions={
-          <Link
-            href="/invoices"
-            className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-border-primary text-text-secondary bg-bg-primary hover:bg-bg-tertiary disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
-          >
+          <PrelineButton variant="secondary" href="/invoices">
             Cancel
-          </Link>
+          </PrelineButton>
         }
       />
 
@@ -173,53 +172,40 @@ export default function CreateInvoicePage() {
               Customer Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Customer Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={invoice.customer_name || ""}
-                  onChange={(e) =>
-                    setInvoice({
-                      ...invoice,
-                      customer_name: e.target.value,
-                    })
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Customer Email
-                </label>
-                <input
-                  type="email"
-                  value={invoice.customer_email || ""}
-                  onChange={(e) =>
-                    setInvoice({
-                      ...invoice,
-                      customer_email: e.target.value,
-                    })
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
+              <PrelineInput
+                type="text"
+                label="Customer Name"
+                required
+                value={invoice.customer_name || ""}
+                onChange={(value) =>
+                  setInvoice({
+                    ...invoice,
+                    customer_name: value,
+                  })
+                }
+              />
+              <PrelineInput
+                type="email"
+                label="Customer Email"
+                value={invoice.customer_email || ""}
+                onChange={(value) =>
+                  setInvoice({
+                    ...invoice,
+                    customer_email: value,
+                  })
+                }
+              />
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Customer Address
-                </label>
-                <textarea
+                <PrelineTextarea
+                  label="Customer Address"
                   rows={3}
                   value={invoice.customer_address || ""}
-                  onChange={(e) =>
+                  onChange={(value) =>
                     setInvoice({
                       ...invoice,
-                      customer_address: e.target.value,
+                      customer_address: value,
                     })
                   }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
                 />
               </div>
             </div>
@@ -233,48 +219,33 @@ export default function CreateInvoicePage() {
               Invoice Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Invoice Number
-                </label>
-                <input
-                  type="text"
-                  value={invoice.invoice_number || ""}
-                  onChange={(e) =>
-                    setInvoice({
-                      ...invoice,
-                      invoice_number: e.target.value,
-                    })
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Issue Date
-                </label>
-                <input
-                  type="date"
-                  value={invoice.issue_date || ""}
-                  onChange={(e) =>
-                    setInvoice({ ...invoice, issue_date: e.target.value })
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  value={invoice.due_date || ""}
-                  onChange={(e) =>
-                    setInvoice({ ...invoice, due_date: e.target.value })
-                  }
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
+              <PrelineInput
+                type="text"
+                label="Invoice Number"
+                value={invoice.invoice_number || ""}
+                onChange={(value) =>
+                  setInvoice({
+                    ...invoice,
+                    invoice_number: value,
+                  })
+                }
+              />
+              <PrelineInput
+                type="date"
+                label="Issue Date"
+                value={invoice.issue_date || ""}
+                onChange={(value) =>
+                  setInvoice({ ...invoice, issue_date: value })
+                }
+              />
+              <PrelineInput
+                type="date"
+                label="Due Date"
+                value={invoice.due_date || ""}
+                onChange={(value) =>
+                  setInvoice({ ...invoice, due_date: value })
+                }
+              />
             </div>
           </div>
         </div>
@@ -286,14 +257,13 @@ export default function CreateInvoicePage() {
               <h3 className="text-lg font-medium text-text-primary">
                 Invoice Items
               </h3>
-              <button
+              <PrelineButton
                 type="button"
                 onClick={addItem}
-                className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                icon={<Plus className="w-4 h-4" />}
               >
-                <Plus className="w-4 h-4 mr-1" />
                 Add Item
-              </button>
+              </PrelineButton>
             </div>
 
             <div className="overflow-hidden">
@@ -321,46 +291,46 @@ export default function CreateInvoicePage() {
                   {items.map((item) => (
                     <tr key={item.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <input
+                        <PrelineInput
                           type="text"
-                          value={item.description}
-                          onChange={(e) =>
-                            updateItem(item.id, "description", e.target.value)
-                          }
-                          className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
                           placeholder="Item description"
+                          value={item.description}
+                          onChange={(value) =>
+                            updateItem(item.id, "description", value)
+                          }
+                          className="mb-0"
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <input
+                        <PrelineInput
                           type="number"
-                          min="0"
-                          step="0.01"
-                          value={item.quantity}
-                          onChange={(e) =>
+                          min={0}
+                          step={0.01}
+                          value={item.quantity.toString()}
+                          onChange={(value) =>
                             updateItem(
                               item.id,
                               "quantity",
-                              parseFloat(e.target.value) || 0
+                              parseFloat(value) || 0
                             )
                           }
-                          className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
+                          className="mb-0"
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <input
+                        <PrelineInput
                           type="number"
-                          min="0"
-                          step="0.01"
-                          value={item.unit_price}
-                          onChange={(e) =>
+                          min={0}
+                          step={0.01}
+                          value={item.unit_price.toString()}
+                          onChange={(value) =>
                             updateItem(
                               item.id,
                               "unit_price",
-                              parseFloat(e.target.value) || 0
+                              parseFloat(value) || 0
                             )
                           }
-                          className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
+                          className="mb-0"
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
@@ -392,31 +362,26 @@ export default function CreateInvoicePage() {
               Totals
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-2">
-                  Tax Rate (%)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={invoice.tax_rate || 0}
-                  onChange={(e) => {
-                    const taxRate = parseFloat(e.target.value) || 0;
-                    const subtotal = invoice.subtotal || 0;
-                    const taxAmount = (subtotal * taxRate) / 100;
-                    const total = subtotal + taxAmount;
-                    setInvoice({
-                      ...invoice,
-                      tax_rate: taxRate,
-                      tax_amount: taxAmount,
-                      total_amount: total,
-                    });
-                  }}
-                  className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
-                />
-              </div>
+              <PrelineInput
+                type="number"
+                label="Tax Rate (%)"
+                min={0}
+                max={100}
+                step={0.01}
+                value={(invoice.tax_rate || 0).toString()}
+                onChange={(value) => {
+                  const taxRate = parseFloat(value) || 0;
+                  const subtotal = invoice.subtotal || 0;
+                  const taxAmount = (subtotal * taxRate) / 100;
+                  const total = subtotal + taxAmount;
+                  setInvoice({
+                    ...invoice,
+                    tax_rate: taxRate,
+                    tax_amount: taxAmount,
+                    total_amount: total,
+                  });
+                }}
+              />
               <div>
                 <label className="block text-sm font-medium text-text-secondary mb-2">
                   Subtotal
@@ -451,34 +416,20 @@ export default function CreateInvoicePage() {
             <h3 className="text-lg font-medium text-text-primary mb-4">
               Notes
             </h3>
-            <textarea
+            <PrelineTextarea
               rows={4}
-              value={invoice.notes || ""}
-              onChange={(e) =>
-                setInvoice({ ...invoice, notes: e.target.value })
-              }
-              className="py-2 px-4 block w-full border border-border-primary rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary"
               placeholder="Additional notes or terms..."
+              value={invoice.notes || ""}
+              onChange={(value) => setInvoice({ ...invoice, notes: value })}
             />
           </div>
         </div>
 
         {/* Submit Button */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-brand-primary text-text-on-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-brand-primary"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin -ml-1 mr-3 h-5 w-5 text-text-on-primary" />
-                Creating...
-              </>
-            ) : (
-              "Create Invoice"
-            )}
-          </button>
+          <PrelineButton type="submit" disabled={loading} loading={loading}>
+            {loading ? "Creating..." : "Create Invoice"}
+          </PrelineButton>
         </div>
       </form>
     </div>

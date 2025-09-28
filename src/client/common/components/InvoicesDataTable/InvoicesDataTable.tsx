@@ -10,6 +10,7 @@ import {
   type DataTableFilter,
 } from "../ui/DataTable/index";
 import { Eye, Edit, Trash2 } from "lucide-react";
+import { PrelineBadge } from "../ui/PrelineBadge";
 
 interface InvoicesDataTableProps {
   initialInvoices: Invoice[];
@@ -205,21 +206,28 @@ export default function InvoicesDataTable({
     {
       key: "status",
       header: "Status",
-      render: (invoice: Invoice) => (
-        <span
-          className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
-            invoice.status === "paid"
-              ? "bg-success-bg text-success-text"
-              : invoice.status === "sent"
-              ? "bg-info-bg text-info-text"
-              : invoice.status === "draft"
-              ? "bg-bg-tertiary text-text-secondary"
-              : "bg-error-bg text-error-text"
-          }`}
-        >
-          {invoice.status}
-        </span>
-      ),
+      render: (invoice: Invoice) => {
+        const getStatusVariant = (status: string) => {
+          switch (status) {
+            case "paid":
+              return "success";
+            case "sent":
+              return "info";
+            case "draft":
+              return "neutral";
+            case "overdue":
+              return "danger";
+            default:
+              return "neutral";
+          }
+        };
+
+        return (
+          <PrelineBadge variant={getStatusVariant(invoice.status)}>
+            {invoice.status}
+          </PrelineBadge>
+        );
+      },
     },
   ];
 

@@ -13,7 +13,7 @@ export interface DataTableAction<T> {
   label: string;
   icon: ReactNode;
   onClick: (row: T) => void;
-  variant?: "default" | "danger" | "warning";
+  variant?: "primary" | "secondary" | "danger" | "warning" | "ghost";
   disabled?: (row: T) => boolean;
 }
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { PrelineIconButton } from "../PrelineIconButton";
+import { PrelineCard } from "../PrelineCard";
 import type { DataTableCardViewProps } from "./types";
 
 export default function DataTableCardView<T extends Record<string, unknown>>({
@@ -11,8 +13,10 @@ export default function DataTableCardView<T extends Record<string, unknown>>({
 }: DataTableCardViewProps<T>) {
   if (data.length === 0) {
     return (
-      <div
-        className={`bg-bg-primary shadow-lg rounded-xl border border-border-primary p-12 text-center ${className}`}
+      <PrelineCard
+        variant="elevated"
+        className={`text-center ${className}`}
+        padding="lg"
       >
         <div className="text-text-muted">
           <svg
@@ -33,17 +37,14 @@ export default function DataTableCardView<T extends Record<string, unknown>>({
           </p>
           <p className="text-sm text-text-muted">{emptyMessage}</p>
         </div>
-      </div>
+      </PrelineCard>
     );
   }
 
   return (
     <div className={`space-y-4 ${className}`}>
       {data.map((row, index) => (
-        <div
-          key={index}
-          className="bg-bg-primary shadow-lg rounded-xl border border-border-primary p-6 hover:shadow-xl transition-shadow duration-200"
-        >
+        <PrelineCard key={index} variant="elevated" hover>
           <div className="space-y-4">
             {/* Main content */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -65,26 +66,19 @@ export default function DataTableCardView<T extends Record<string, unknown>>({
             {actions.length > 0 && (
               <div className="flex items-center justify-end space-x-2 pt-4 border-t border-border-primary">
                 {actions.map((action, actionIndex) => (
-                  <button
+                  <PrelineIconButton
                     key={actionIndex}
+                    icon={action.icon}
                     onClick={() => action.onClick(row)}
                     disabled={action.disabled?.(row)}
-                    className={`p-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-                      action.variant === "danger"
-                        ? "text-error hover:text-error-text hover:bg-error-bg"
-                        : action.variant === "warning"
-                        ? "text-warning hover:text-warning-text hover:bg-warning-bg"
-                        : "text-brand-primary hover:text-brand-primary-hover hover:bg-brand-primary/10"
-                    }`}
+                    variant={action.variant || "primary"}
                     title={action.label}
-                  >
-                    {action.icon}
-                  </button>
+                  />
                 ))}
               </div>
             )}
           </div>
-        </div>
+        </PrelineCard>
       ))}
     </div>
   );
