@@ -68,9 +68,6 @@ export async function signUpWithGoogle() {
     siteUrl
   );
 
-  // sleep for 10 seconds
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
