@@ -1,6 +1,6 @@
 "use client";
 
-import { invoiceService } from "@/db/database";
+import { invoiceApiService } from "@/client/api/invoices";
 import { notFound } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/client/common/components/PageHeader";
@@ -25,7 +25,7 @@ export default function InvoiceDetailPage({ params }: InvoiceDetailPageProps) {
     const loadInvoice = async () => {
       try {
         const { id } = await params;
-        const invoiceData = await invoiceService.getById(id);
+        const invoiceData = await invoiceApiService.getById(id);
         setInvoice(invoiceData);
       } catch (error) {
         console.error("Error loading invoice:", error);

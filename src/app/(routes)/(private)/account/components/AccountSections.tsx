@@ -1,9 +1,45 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Settings, CreditCard } from "lucide-react";
 import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { invoiceApiService } from "@/client/api/invoices";
+import type { Invoice } from "@/db/database";
 
 export const AccountSections = () => {
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const data = await invoiceApiService.getAll();
+        setInvoices(data);
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
+
+  // Calculate statistics from actual invoice data
+  const totalInvoices = invoices.length;
+  const totalRevenue = invoices
+    .filter((invoice) => invoice.status === "paid")
+    .reduce((sum, invoice) => sum + invoice.total_amount, 0);
+  const activeClients = new Set(
+    invoices.map((invoice) => invoice.customer_name)
+  ).size;
+
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "EUR",
+    }).format(amount);
+
   const accountSections = [
     {
       title: "Account Settings",
@@ -18,9 +54,18 @@ export const AccountSections = () => {
       title: "Statistics",
       icon: CreditCard,
       items: [
-        { label: "Total Invoices", value: "120" }, // TODO: Add the total number of invoices
-        { label: "Total Revenue", value: "12,000.00 €" }, // TODO: Add the total revenue
-        { label: "Active Clients", value: "12" }, // TODO: Add the number of active clients
+        {
+          label: "Total Invoices",
+          value: loading ? "..." : totalInvoices.toString(),
+        },
+        {
+          label: "Total Revenue",
+          value: loading ? "..." : formatCurrency(totalRevenue),
+        },
+        {
+          label: "Active Clients",
+          value: loading ? "..." : activeClients.toString(),
+        },
       ],
     },
   ];

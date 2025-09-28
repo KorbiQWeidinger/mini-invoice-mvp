@@ -24,7 +24,31 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const invoice = await invoiceService.update(id, body);
+    const { items, ...invoiceData } = body;
+
+    // Update invoice
+    const invoice = await invoiceService.update(id, invoiceData);
+
+    // Handle invoice items if provided
+    if (items && Array.isArray(items)) {
+      const { invoiceItemService } = await import("@/db/database");
+
+      // Get existing items
+      const existingItems = await invoiceItemService.getByInvoiceId(id);
+
+      // Delete existing items
+      for (const item of existingItems) {
+        await invoiceItemService.delete(item.id);
+      }
+
+      // Create new items
+      for (const item of items) {
+        await invoiceItemService.create({
+          ...item,
+          invoice_id: id,
+        });
+      }
+    }
 
     return NextResponse.json({ invoice });
   } catch (error) {

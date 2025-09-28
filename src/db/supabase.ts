@@ -12,6 +12,7 @@ export interface Database {
       invoices: {
         Row: {
           id: string;
+          user_id: string;
           invoice_number: string;
           customer_name: string;
           customer_email: string | null;
@@ -29,6 +30,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
+          user_id?: string;
           invoice_number: string;
           customer_name: string;
           customer_email?: string | null;
@@ -46,6 +48,7 @@ export interface Database {
         };
         Update: {
           id?: string;
+          user_id?: string;
           invoice_number?: string;
           customer_name?: string;
           customer_email?: string | null;
@@ -66,6 +69,7 @@ export interface Database {
         Row: {
           id: string;
           invoice_id: string;
+          user_id: string;
           description: string;
           quantity: number;
           unit_price: number;
@@ -75,6 +79,7 @@ export interface Database {
         Insert: {
           id?: string;
           invoice_id: string;
+          user_id?: string;
           description: string;
           quantity?: number;
           unit_price: number;
@@ -84,6 +89,7 @@ export interface Database {
         Update: {
           id?: string;
           invoice_id?: string;
+          user_id?: string;
           description?: string;
           quantity?: number;
           unit_price?: number;

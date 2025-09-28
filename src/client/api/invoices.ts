@@ -1,4 +1,9 @@
-import type { Invoice, InvoiceInsert, InvoiceUpdate, InvoiceItem } from "@/db/database";
+import type {
+  Invoice,
+  InvoiceInsert,
+  InvoiceUpdate,
+  InvoiceItem,
+} from "@/db/database";
 
 // Client-side API service for invoices
 export const invoiceApiService = {
@@ -20,7 +25,9 @@ export const invoiceApiService = {
   },
 
   // Get invoice by ID
-  async getById(id: string): Promise<Invoice & { invoice_items: InvoiceItem[] }> {
+  async getById(
+    id: string
+  ): Promise<Invoice & { invoice_items: InvoiceItem[] }> {
     const response = await fetch(`/api/invoices/${id}`, {
       method: "GET",
       headers: {

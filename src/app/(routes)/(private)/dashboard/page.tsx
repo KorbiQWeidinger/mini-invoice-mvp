@@ -117,9 +117,11 @@ export default async function DashboardPage() {
       <PrelineCard
         title="Recent Invoices"
         actions={
-          <PrelineButton variant="ghost" size="sm" href="/invoices">
-            View all invoices →
-          </PrelineButton>
+          recentInvoices.length > 0 && (
+            <PrelineButton variant="ghost" size="sm" href="/invoices">
+              View all invoices →
+            </PrelineButton>
+          )
         }
         variant="elevated"
       >
@@ -127,7 +129,7 @@ export default async function DashboardPage() {
           <DashboardRecentInvoices invoices={recentInvoices} />
         ) : (
           <div className="text-center py-8">
-            <p className="text-text-secondary">
+            <p className="text-text-secondary mb-4">
               No invoices found. Create your first invoice to get started.
             </p>
             <PrelineButton href="/invoices/new">Create Invoice</PrelineButton>

@@ -31,3 +31,7 @@ You must ALWAYS follow these rules. At the end of each task, ask yourself if you
 - Component definitions should be short, simple, and focused. Don't repeat yourself and extract small reusable components whenever applicable.
 - If you find code that does not follow these rules, refactor it to follow these rules.
 - You must never use the `any` type.
+
+### Supabase
+
+Check our .env.local file for the Supabase credentials to do db operations.

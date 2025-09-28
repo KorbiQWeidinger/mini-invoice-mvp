@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { invoiceService, type Invoice } from "@/db/database";
+import { invoiceApiService } from "@/client/api/invoices";
+import type { Invoice } from "@/db/database";
 import { PrelineConfirmationModal } from "@/client/common/components/ui/PrelineModal";
 import {
   DataTable,
@@ -36,7 +37,7 @@ export default function InvoicesDataTable({
   useEffect(() => {
     const refreshData = async () => {
       try {
-        const updatedInvoices = await invoiceService.getAll();
+        const updatedInvoices = await invoiceApiService.getAll();
         setInvoices(updatedInvoices);
       } catch (error) {
         console.error("Error refreshing invoices:", error);
@@ -79,7 +80,7 @@ export default function InvoicesDataTable({
     if (!deleteModal.invoiceId) return;
 
     try {
-      await invoiceService.delete(deleteModal.invoiceId);
+      await invoiceApiService.delete(deleteModal.invoiceId);
       setInvoices(
         invoices.filter((invoice) => invoice.id !== deleteModal.invoiceId)
       );
@@ -95,7 +96,7 @@ export default function InvoicesDataTable({
 
   const handleRefresh = async () => {
     try {
-      const updatedInvoices = await invoiceService.getAll();
+      const updatedInvoices = await invoiceApiService.getAll();
       setInvoices(updatedInvoices);
     } catch (error) {
       console.error("Error refreshing invoices:", error);

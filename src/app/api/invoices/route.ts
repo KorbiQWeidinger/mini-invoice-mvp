@@ -42,7 +42,21 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const invoice = await invoiceService.create(body);
+    const { items, ...invoiceData } = body;
+
+    // Create invoice
+    const invoice = await invoiceService.create(invoiceData);
+
+    // Create invoice items if provided
+    if (items && Array.isArray(items)) {
+      const { invoiceItemService } = await import("@/db/database");
+      for (const item of items) {
+        await invoiceItemService.create({
+          ...item,
+          invoice_id: invoice.id,
+        });
+      }
+    }
 
     return NextResponse.json({ invoice }, { status: 201 });
   } catch (error) {

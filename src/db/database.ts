@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { createServerClient } from "@/server/supabase/createServerClient";
 import type { Database } from "./supabase";
 
 // Type aliases for easier usage
@@ -14,8 +14,9 @@ export type InvoiceItemUpdate =
 
 // Invoice operations
 export const invoiceService = {
-  // Get all invoices
+  // Get all invoices for the authenticated user
   async getAll() {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoices")
       .select("*")
@@ -26,8 +27,9 @@ export const invoiceService = {
     return data;
   },
 
-  // Get invoice by ID
+  // Get invoice by ID for the authenticated user
   async getById(id: string) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoices")
       .select(
@@ -43,8 +45,9 @@ export const invoiceService = {
     return data;
   },
 
-  // Create new invoice
+  // Create new invoice for the authenticated user
   async create(invoice: InvoiceInsert) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoices")
       .insert(invoice)
@@ -55,8 +58,9 @@ export const invoiceService = {
     return data;
   },
 
-  // Update invoice
+  // Update invoice for the authenticated user
   async update(id: string, updates: InvoiceUpdate) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoices")
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -68,15 +72,17 @@ export const invoiceService = {
     return data;
   },
 
-  // Delete invoice
+  // Delete invoice for the authenticated user
   async delete(id: string) {
+    const supabase = await createServerClient();
     const { error } = await supabase.from("invoices").delete().eq("id", id);
 
     if (error) throw error;
   },
 
-  // Search invoices
+  // Search invoices for the authenticated user
   async search(query: string) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoices")
       .select("*")
@@ -92,8 +98,9 @@ export const invoiceService = {
 
 // Invoice items operations
 export const invoiceItemService = {
-  // Get items for an invoice
+  // Get items for an invoice for the authenticated user
   async getByInvoiceId(invoiceId: string) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoice_items")
       .select("*")
@@ -104,8 +111,9 @@ export const invoiceItemService = {
     return data;
   },
 
-  // Add item to invoice
+  // Add item to invoice for the authenticated user
   async create(item: InvoiceItemInsert) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoice_items")
       .insert(item)
@@ -116,8 +124,9 @@ export const invoiceItemService = {
     return data;
   },
 
-  // Update item
+  // Update item for the authenticated user
   async update(id: string, updates: InvoiceItemUpdate) {
+    const supabase = await createServerClient();
     const { data, error } = await supabase
       .from("invoice_items")
       .update(updates)
@@ -129,8 +138,9 @@ export const invoiceItemService = {
     return data;
   },
 
-  // Delete item
+  // Delete item for the authenticated user
   async delete(id: string) {
+    const supabase = await createServerClient();
     const { error } = await supabase
       .from("invoice_items")
       .delete()

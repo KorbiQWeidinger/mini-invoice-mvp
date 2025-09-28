@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  invoiceService,
-  invoiceItemService,
-  type InvoiceInsert,
-  type InvoiceItemInsert,
-  type Invoice,
-  type InvoiceItem,
+import { invoiceApiService } from "@/client/api/invoices";
+import type {
+  InvoiceInsert,
+  InvoiceItemInsert,
+  Invoice,
+  InvoiceItem,
 } from "@/db/database";
 import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
@@ -29,7 +28,7 @@ export default function EditInvoicePage({ params }: EditInvoicePageProps) {
     const loadInvoice = async () => {
       try {
         const { id } = await params;
-        const invoiceData = await invoiceService.getById(id);
+        const invoiceData = await invoiceApiService.getById(id);
         setInvoice(invoiceData);
         setItems(invoiceData.invoice_items || []);
       } catch (error) {
@@ -52,21 +51,13 @@ export default function EditInvoicePage({ params }: EditInvoicePageProps) {
     setLoading(true);
 
     try {
-      // Update invoice
-      await invoiceService.update(invoice.id, invoiceData);
+      // Update invoice with items via API
+      const updateData = {
+        ...invoiceData,
+        items: itemsData,
+      };
 
-      // Delete existing items
-      for (const item of items) {
-        await invoiceItemService.delete(item.id);
-      }
-
-      // Create new items
-      for (const item of itemsData) {
-        await invoiceItemService.create({
-          ...item,
-          invoice_id: invoice.id,
-        });
-      }
+      await invoiceApiService.update(invoice.id, updateData);
 
       router.push(`/invoices/${invoice.id}`);
     } catch (error) {
