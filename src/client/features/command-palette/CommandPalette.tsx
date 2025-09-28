@@ -133,9 +133,16 @@ export function CommandPalette({
       icon: LogOut,
       category: "Account",
       keywords: ["exit", "quit", "signout"],
-      action: () => {
-        // Handle logout
+      action: async () => {
         onClose();
+        try {
+          const { logout } = await import(
+            "@/app/(routes)/(private)/account/actions"
+          );
+          await logout();
+        } catch (error) {
+          console.error("Logout failed:", error);
+        }
       },
     },
   ];

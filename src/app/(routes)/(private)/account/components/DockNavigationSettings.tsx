@@ -1,8 +1,8 @@
 "use client";
 
 import { Settings } from "lucide-react";
-import { PrelineCard } from "../../../../client/common/components/ui/PrelineCard";
-import { PrelineToggle } from "../../../../client/common/components/ui/PrelineToggle";
+import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { PrelineToggle } from "@/client/common/components/ui/PrelineToggle";
 import { useSettings } from "@/client/features/settings/SettingsProvider";
 
 export const DockNavigationSettings = () => {

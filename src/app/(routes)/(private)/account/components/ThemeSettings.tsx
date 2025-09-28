@@ -1,7 +1,7 @@
 "use client";
 
 import { Palette } from "lucide-react";
-import { PrelineCard } from "../../../../client/common/components/ui/PrelineCard";
+import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
 import ThemeSwitcherDropdown from "@/client/features/theme/ThemeSwitcherDropdown";
 
 export const ThemeSettings = () => {

@@ -1,8 +1,8 @@
 "use client";
 
 import { Shield } from "lucide-react";
-import { PrelineCard } from "../../../../client/common/components/ui/PrelineCard";
-import { PrelineButton } from "../../../../client/common/components/ui/PrelineButton";
+import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 
 export const SecuritySettings = () => {
   return (

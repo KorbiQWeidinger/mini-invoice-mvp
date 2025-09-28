@@ -1,10 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import { LogOut } from "lucide-react";
-import { PrelineCard } from "../../../../client/common/components/ui/PrelineCard";
-import { PrelineButton } from "../../../../client/common/components/ui/PrelineButton";
+import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
+import { logout } from "@/app/(routes)/(private)/account/actions";
 
 export const DangerZone = () => {
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <PrelineCard
       title="Danger Zone"
@@ -21,8 +35,13 @@ export const DangerZone = () => {
               Sign out of your account on this device
             </p>
           </div>
-          <PrelineButton variant="danger" size="sm">
-            Sign Out
+          <PrelineButton
+            variant="danger"
+            size="sm"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? "Signing Out..." : "Sign Out"}
           </PrelineButton>
         </div>
         <div className="flex justify-between items-center">
