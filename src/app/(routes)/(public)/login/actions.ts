@@ -55,11 +55,6 @@ export async function signUpWithGoogle() {
       return process.env.NEXT_PUBLIC_SITE_URL;
     }
 
-    // Then try Vercel's automatic URL
-    if (process.env.VERCEL_URL) {
-      return `https://${process.env.VERCEL_URL}`;
-    }
-
     // Fallback to localhost for development
     return "https://mini-invoice-mvp.vercel.app";
   };
@@ -67,12 +62,10 @@ export async function signUpWithGoogle() {
   const siteUrl = getSiteUrl();
 
   console.log(
-    "siteUrl",
-    siteUrl,
     "NEXT_PUBLIC_SITE_URL",
     process.env.NEXT_PUBLIC_SITE_URL,
-    "VERCEL_URL",
-    process.env.VERCEL_URL
+    "redirectTo",
+    siteUrl
   );
 
   // sleep for 10 seconds
