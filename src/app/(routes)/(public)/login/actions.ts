@@ -48,8 +48,29 @@ export async function signup(formData: FormData) {
 export async function signUpWithGoogle() {
   const supabase = await createServerClient();
 
-  // Use the current origin if NEXT_PUBLIC_SITE_URL is not set
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  // Get the site URL with better fallback logic
+  const getSiteUrl = () => {
+    // First try the environment variable
+    if (process.env.NEXT_PUBLIC_SITE_URL) {
+      return process.env.NEXT_PUBLIC_SITE_URL;
+    }
+
+    // Then try Vercel's automatic URL
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+
+    // Fallback to localhost for development
+    return "http://localhost:3000";
+  };
+
+  const siteUrl = getSiteUrl();
+  console.log("Environment variables:", {
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    VERCEL_URL: process.env.VERCEL_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    finalSiteUrl: siteUrl,
+  });
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
