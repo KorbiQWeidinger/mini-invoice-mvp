@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { invoiceService } from "@/lib/database";
+import { invoiceService } from "@/db/database";
 
 // Disable caching for API routes
 export const dynamic = "force-dynamic";

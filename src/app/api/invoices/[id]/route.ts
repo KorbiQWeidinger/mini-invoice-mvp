@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { invoiceService } from "@/lib/database";
+import { invoiceService } from "@/db/database";
 
 // GET /api/invoices/[id] - Get single invoice
 export async function GET(

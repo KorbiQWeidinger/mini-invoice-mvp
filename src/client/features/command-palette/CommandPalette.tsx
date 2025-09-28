@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { useBreakpoint } from "@/lib/hooks";
+import { useBreakpoint } from "@/client/common/hooks/useBreakpoint";
 
 interface CommandPaletteProps {
   isOpen: boolean;

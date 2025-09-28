@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { invoiceService } from "@/lib/database";
-import InvoicesDataTable from "@/components/InvoicesDataTable";
+import { invoiceService } from "@/db/database";
+import InvoicesDataTable from "@/client/common/components/InvoicesDataTable";
 import { Plus } from "lucide-react";
-import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/client/common/components/PageHeader";
 
 // Disable caching for this page to ensure fresh data
 export const dynamic = "force-dynamic";

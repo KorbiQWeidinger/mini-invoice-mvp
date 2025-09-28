@@ -176,15 +176,15 @@ DELETE /api/invoices/[id]/items/[itemId] # Delete item
 
 ## Development Phases
 
-### Phase 1: Core Setup (Week 1)
+### Phase 1: Core Setup
 
-- [ ] Next.js project initialization
-- [ ] Supabase setup and configuration
-- [ ] Database schema creation
-- [ ] Basic routing structure
-- [ ] Preline.co integration
+- [x] Next.js project initialization
+- [x] Supabase setup and configuration
+- [x] Database schema creation
+- [x] Basic routing structure
+- [x] Preline.co integration
 
-### Phase 2: Invoice CRUD (Week 2)
+### Phase 2: Invoice CRUD
 
 - [ ] Invoice list with DataTable
 - [ ] Create invoice form
@@ -192,14 +192,14 @@ DELETE /api/invoices/[id]/items/[itemId] # Delete item
 - [ ] Delete invoice with confirmation
 - [ ] Search and filtering
 
-### Phase 3: Real-time Preview (Week 3)
+### Phase 3: Real-time Preview
 
 - [ ] Live preview component
 - [ ] Form-to-preview synchronization
 - [ ] Print-ready styling
 - [ ] Responsive preview layout
 
-### Phase 4: Polish & Testing (Week 4)
+### Phase 4: Polish & Testing
 
 - [ ] Form validation improvements
 - [ ] Error handling

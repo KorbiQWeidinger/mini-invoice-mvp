@@ -7,10 +7,10 @@ import {
   invoiceItemService,
   type InvoiceInsert,
   type InvoiceItemInsert,
-} from "@/lib/database";
+} from "@/db/database";
 import { useRouter } from "next/navigation";
 import { Plus, Loader2 } from "lucide-react";
-import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/client/common/components/PageHeader";
 
 interface InvoiceItem {
   id: string;

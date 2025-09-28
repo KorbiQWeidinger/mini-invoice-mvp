@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { invoiceService } from "@/lib/database";
+import { invoiceService } from "@/db/database";
 import { FileText, CheckCircle, Send, Edit } from "lucide-react";
-import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/client/common/components/PageHeader";
 
 // Disable caching for this page to ensure fresh data
 export const dynamic = "force-dynamic";

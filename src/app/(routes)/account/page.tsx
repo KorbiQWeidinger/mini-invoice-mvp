@@ -9,9 +9,9 @@ import {
   Shield,
   CreditCard,
 } from "lucide-react";
-import ThemeSwitcherDropdown from "@/components/ThemeSwitcherDropdown";
-import { useSettings } from "@/components/SettingsProvider";
-import PageHeader from "@/components/PageHeader";
+import ThemeSwitcherDropdown from "@/client/features/theme/ThemeSwitcherDropdown";
+import { useSettings } from "@/client/features/settings/SettingsProvider";
+import PageHeader from "@/client/common/components/PageHeader";
 
 export default function AccountPage() {
   const { dockSettings, setDockSticky } = useSettings();

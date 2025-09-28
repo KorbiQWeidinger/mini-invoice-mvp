@@ -2,7 +2,7 @@
 
 import { useTheme } from "./ThemeProvider";
 import { Sun, Moon, Coffee, ChevronDown } from "lucide-react";
-import { usePrelineReinit } from "@/lib/hooks/usePrelineReinit";
+import { usePrelineReinit } from "@/client/common/hooks/usePrelineReinit";
 
 export default function ThemeSwitcherDropdown() {
   const { theme, setTheme } = useTheme();

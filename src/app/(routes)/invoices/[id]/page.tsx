@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { invoiceService, type InvoiceItem } from "@/lib/database";
+import { invoiceService, type InvoiceItem } from "@/db/database";
 import { notFound } from "next/navigation";
-import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/client/common/components/PageHeader";
 
 interface InvoiceDetailPageProps {
   params: Promise<{ id: string }>;

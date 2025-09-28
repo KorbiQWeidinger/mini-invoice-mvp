@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { invoiceService, type Invoice } from "@/lib/database";
-import ConfirmModal from "./ConfirmModal";
+import { invoiceService, type Invoice } from "@/db/database";
+import ConfirmModal from "./ui/ConfirmModal";
 import { Search, ChevronDown, RefreshCw } from "lucide-react";
 
 interface InvoicesDataTableProps {

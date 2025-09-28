@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import PrelineScript from "@/components/PrelineScript";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { SettingsProvider } from "@/components/SettingsProvider";
-import DockNavigation from "@/components/DockNavigation";
+import PrelineScript from "@/client/common/utils/PrelineScript";
+import { ThemeProvider } from "@/client/features/theme/ThemeProvider";
+import { SettingsProvider } from "@/client/features/settings/SettingsProvider";
+import DockNavigation from "@/client/features/dock-navigation/DockNavigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,9 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mini-Invoice MVP",
-  description:
-    "A minimal viable product for invoice management with real-time preview and CRUD operations",
+  title: "Beleg Buddy",
+  description: "A invoice management system for small businesses",
 };
 
 export default function RootLayout({
