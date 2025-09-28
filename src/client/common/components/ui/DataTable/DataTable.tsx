@@ -314,8 +314,20 @@ export function DataTable<T extends Record<string, unknown>>({
           />
         )}
 
+        {/* Mobile Pagination at Top */}
+        {paginated && sortedData.length > 0 && (
+          <DataTablePagination
+            currentPage={state.currentPage}
+            totalPages={state.totalPages}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            totalItems={sortedData.length}
+            onPageChange={handlers.handlePageChange}
+          />
+        )}
+
         <DataTableCardView
-          data={sortedData}
+          data={paginatedData}
           columns={columns}
           actions={actions}
           emptyMessage={emptyMessage}

@@ -2,6 +2,8 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PrelineButton } from "../PrelineButton";
+import { PrelineCard } from "../PrelineCard";
+import { useBreakpoint } from "../../../hooks/useBreakpoint";
 
 interface DataTablePaginationProps {
   currentPage: number;
@@ -20,8 +22,10 @@ export function DataTablePagination({
   totalItems,
   onPageChange,
 }: DataTablePaginationProps) {
+  const { isMobile } = useBreakpoint();
+
   const renderPageNumbers = () => {
-    const maxVisiblePages = 5;
+    const maxVisiblePages = isMobile ? 3 : 5;
     const pages = [];
 
     if (totalPages <= maxVisiblePages) {
@@ -30,9 +34,10 @@ export function DataTablePagination({
         pages.push(i);
       }
     } else {
-      // Show current page and 2 pages on each side
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
+      // Show current page and pages on each side (fewer on mobile)
+      const sidePages = isMobile ? 1 : 2;
+      const startPage = Math.max(1, currentPage - sidePages);
+      const endPage = Math.min(totalPages, currentPage + sidePages);
 
       // Always show first page
       if (startPage > 1) {
@@ -81,41 +86,47 @@ export function DataTablePagination({
     });
   };
 
+  const paginationContent = (
+    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      {/* Info */}
+      <div className="text-sm text-text-secondary">
+        Showing {startIndex} to {endIndex} of {totalItems} entries
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center space-x-2">
+        <PrelineButton
+          variant="secondary"
+          size={isMobile ? "md" : "sm"}
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          icon={<ChevronLeft />}
+        >
+          {isMobile ? "" : "Previous"}
+        </PrelineButton>
+
+        <div className="flex items-center space-x-1">{renderPageNumbers()}</div>
+
+        <PrelineButton
+          variant="secondary"
+          size={isMobile ? "md" : "sm"}
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          icon={<ChevronRight />}
+        >
+          {isMobile ? "" : "Next"}
+        </PrelineButton>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return <PrelineCard variant="elevated">{paginationContent}</PrelineCard>;
+  }
+
   return (
     <div className="bg-bg-secondary border-t border-border-primary px-6 py-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        {/* Info */}
-        <div className="text-sm text-text-secondary">
-          Showing {startIndex} to {endIndex} of {totalItems} entries
-        </div>
-
-        {/* Pagination */}
-        <div className="flex items-center space-x-2">
-          <PrelineButton
-            variant="secondary"
-            size="sm"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            icon={<ChevronLeft className="size-4" />}
-          >
-            Previous
-          </PrelineButton>
-
-          <div className="flex items-center space-x-1">
-            {renderPageNumbers()}
-          </div>
-
-          <PrelineButton
-            variant="secondary"
-            size="sm"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            icon={<ChevronRight className="size-4" />}
-          >
-            Next
-          </PrelineButton>
-        </div>
-      </div>
+      {paginationContent}
     </div>
   );
 }
