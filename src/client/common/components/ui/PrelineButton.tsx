@@ -73,8 +73,16 @@ function ButtonContent({
 }) {
   return (
     <>
-      {loading && <Loader2 className={`${iconSizeClasses} animate-spin`} />}
-      {!loading && icon && <span className={iconSizeClasses}>{icon}</span>}
+      {loading && (
+        <Loader2 className={`${iconSizeClasses} animate-spin flex-shrink-0`} />
+      )}
+      {!loading && icon && (
+        <span
+          className={`${iconSizeClasses} flex-shrink-0 flex items-center justify-center`}
+        >
+          {icon}
+        </span>
+      )}
       {children}
     </>
   );
