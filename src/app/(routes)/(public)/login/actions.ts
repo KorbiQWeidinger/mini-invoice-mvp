@@ -61,16 +61,10 @@ export async function signUpWithGoogle() {
     }
 
     // Fallback to localhost for development
-    return "http://localhost:3000";
+    return "https://mini-invoice-mvp.vercel.app";
   };
 
   const siteUrl = getSiteUrl();
-  console.log("Environment variables:", {
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-    VERCEL_URL: process.env.VERCEL_URL,
-    NODE_ENV: process.env.NODE_ENV,
-    finalSiteUrl: siteUrl,
-  });
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",

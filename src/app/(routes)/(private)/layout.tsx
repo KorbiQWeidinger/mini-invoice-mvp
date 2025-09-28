@@ -34,6 +34,7 @@ export default async function PrivateLayout({
   if (error || !data?.user) {
     redirect("/login");
   }
+
   return (
     <html lang="en">
       <body
