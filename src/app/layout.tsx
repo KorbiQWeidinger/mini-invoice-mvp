@@ -5,6 +5,7 @@ import PrelineScript from "@/client/common/utils/PrelineScript";
 import { ThemeProvider } from "@/client/features/theme/ThemeProvider";
 import { SettingsProvider } from "@/client/features/settings/SettingsProvider";
 import DockNavigation from "@/client/features/dock-navigation/DockNavigation";
+import { AppToolbar } from "@/client/common/components/AppToolbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Beleg Buddy",
+  title: "Invoice Buddy",
   description: "A invoice management system for small businesses",
 };
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <ThemeProvider>
           <SettingsProvider>
             <div className="min-h-screen bg-bg-primary">
+              <AppToolbar />
               <main className="pb-20">{children}</main>
               <DockNavigation />
             </div>

@@ -246,7 +246,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-tertiary);
+  background: var(--color-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {

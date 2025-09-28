@@ -14,7 +14,7 @@ interface UserProfileCardProps {
 
 export const UserProfileCard = ({ user }: UserProfileCardProps) => {
   return (
-    <PrelineCard variant="outlined" className="mb-8">
+    <PrelineCard variant="outlined" className="mb-6">
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 bg-brand-primary rounded-full flex items-center justify-center">
           <User className="w-8 h-8 text-text-on-primary" />

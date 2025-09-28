@@ -256,162 +256,160 @@ export function CommandPalette({
       closeOnBackdrop
     >
       <PrelineModal.Body noPadding>
-        <div className="bg-bg-primary border border-border-primary rounded-lg">
-          {/* Search Input */}
-          <div className="flex items-center gap-3 p-4 border-b border-border-primary">
-            <Search className="w-5 h-5 text-text-secondary" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setSelectedIndex(0);
-              }}
-              placeholder="Search commands..."
-              className="flex-1 bg-transparent text-text-primary placeholder-text-secondary focus:outline-none"
-            />
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-bg-hover rounded transition-colors duration-200"
-            >
-              <X className="w-4 h-4 text-text-secondary" />
-            </button>
-          </div>
+        {/* Search Input */}
+        <div className="flex items-center gap-3 p-4 border-b border-border-primary">
+          <Search className="w-5 h-5 text-text-secondary" />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelectedIndex(0);
+            }}
+            placeholder="Search commands..."
+            className="flex-1 bg-transparent text-text-primary placeholder-text-secondary focus:outline-none"
+          />
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-bg-hover rounded transition-colors duration-200"
+          >
+            <X className="w-4 h-4 text-text-secondary" />
+          </button>
+        </div>
 
-          {/* Category Filter */}
-          {query && (
-            <div className="px-4 py-2 border-b border-border-primary">
-              <div className="flex gap-2 flex-wrap">
+        {/* Category Filter */}
+        {query && (
+          <div className="px-4 py-2 border-b border-border-primary">
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className={`px-2 py-1 text-xs rounded transition-colors duration-200 ${
+                  !selectedCategory
+                    ? "bg-brand-primary text-text-on-primary"
+                    : "bg-bg-hover text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                All
+              </button>
+              {categories.map((category) => (
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
                   className={`px-2 py-1 text-xs rounded transition-colors duration-200 ${
-                    !selectedCategory
+                    selectedCategory === category
                       ? "bg-brand-primary text-text-on-primary"
                       : "bg-bg-hover text-text-secondary hover:text-text-primary"
                   }`}
                 >
-                  All
+                  {category}
                 </button>
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-2 py-1 text-xs rounded transition-colors duration-200 ${
-                      selectedCategory === category
-                        ? "bg-brand-primary text-text-on-primary"
-                        : "bg-bg-hover text-text-secondary hover:text-text-primary"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+              ))}
             </div>
-          )}
-
-          {/* Commands List */}
-          <div className="max-h-80 overflow-y-auto">
-            {Object.keys(groupedCommands).length > 0 ? (
-              Object.entries(groupedCommands).map(
-                ([category, categoryCommands]) => (
-                  <div key={category}>
-                    {/* Category Header */}
-                    <div className="px-4 py-2 bg-bg-tertiary border-b border-border-primary">
-                      <div className="text-xs font-medium text-text-secondary uppercase tracking-wide">
-                        {category}
-                      </div>
-                    </div>
-
-                    {/* Category Commands */}
-                    {categoryCommands.map((command) => {
-                      const globalIndex = filteredCommands.findIndex(
-                        (c) => c.id === command.id
-                      );
-                      const Icon = command.icon;
-                      const isActive = isCommandActive(command.id);
-                      const isSelected = globalIndex === selectedIndex;
-
-                      return (
-                        <button
-                          key={command.id}
-                          onClick={command.action}
-                          className={`w-full flex items-center gap-3 p-3 text-left hover:bg-bg-hover transition-colors duration-200 ${
-                            isSelected ? "bg-bg-hover" : ""
-                          } ${
-                            isActive
-                              ? "border-l-2 border-brand-primary bg-brand-primary/5"
-                              : ""
-                          }`}
-                        >
-                          <Icon className="w-5 h-5 text-text-secondary flex-shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-text-primary">
-                              {command.title}
-                            </div>
-                            <div className="text-xs text-text-secondary">
-                              {command.description}
-                            </div>
-                          </div>
-                          {command.id === "theme" && (
-                            <div className="opacity-0 group-hover:opacity-100">
-                              <span className="text-xs text-text-tertiary">
-                                Click to switch
-                              </span>
-                            </div>
-                          )}
-                          <ArrowRight className="w-4 h-4 text-text-tertiary flex-shrink-0" />
-                        </button>
-                      );
-                    })}
-                  </div>
-                )
-              )
-            ) : (
-              <div className="p-4 text-center text-text-secondary">
-                <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <div>No commands found</div>
-                <div className="text-xs mt-1">Try a different search term</div>
-              </div>
-            )}
           </div>
+        )}
 
-          {/* Footer */}
-          {!isTablet && (
-            <div className="flex items-center justify-between p-3 border-t border-border-primary text-xs text-text-tertiary">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1">
-                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                    ↑↓
-                  </kbd>
-                  navigate
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                    ↵
-                  </kbd>
-                  select
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                    tab
-                  </kbd>
-                  filter
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
-                    esc
-                  </kbd>
-                  close
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Command className="w-3 h-3" />
-                <span>K</span>
-              </div>
+        {/* Commands List */}
+        <div className="max-h-80 overflow-y-auto">
+          {Object.keys(groupedCommands).length > 0 ? (
+            Object.entries(groupedCommands).map(
+              ([category, categoryCommands]) => (
+                <div key={category}>
+                  {/* Category Header */}
+                  <div className="px-4 py-2 bg-bg-tertiary border-b border-border-primary">
+                    <div className="text-xs font-medium text-text-secondary uppercase tracking-wide">
+                      {category}
+                    </div>
+                  </div>
+
+                  {/* Category Commands */}
+                  {categoryCommands.map((command) => {
+                    const globalIndex = filteredCommands.findIndex(
+                      (c) => c.id === command.id
+                    );
+                    const Icon = command.icon;
+                    const isActive = isCommandActive(command.id);
+                    const isSelected = globalIndex === selectedIndex;
+
+                    return (
+                      <button
+                        key={command.id}
+                        onClick={command.action}
+                        className={`w-full flex items-center gap-3 p-3 text-left hover:bg-bg-hover transition-colors duration-200 ${
+                          isSelected ? "bg-bg-hover" : ""
+                        } ${
+                          isActive
+                            ? "border-l-2 border-brand-primary bg-brand-primary/5"
+                            : ""
+                        }`}
+                      >
+                        <Icon className="w-5 h-5 text-text-secondary flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-text-primary">
+                            {command.title}
+                          </div>
+                          <div className="text-xs text-text-secondary">
+                            {command.description}
+                          </div>
+                        </div>
+                        {command.id === "theme" && (
+                          <div className="opacity-0 group-hover:opacity-100">
+                            <span className="text-xs text-text-tertiary">
+                              Click to switch
+                            </span>
+                          </div>
+                        )}
+                        <ArrowRight className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                      </button>
+                    );
+                  })}
+                </div>
+              )
+            )
+          ) : (
+            <div className="p-4 text-center text-text-secondary">
+              <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <div>No commands found</div>
+              <div className="text-xs mt-1">Try a different search term</div>
             </div>
           )}
         </div>
+
+        {/* Footer */}
+        {!isTablet && (
+          <div className="flex items-center justify-between p-3 border-t border-border-primary text-xs text-text-tertiary">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                  ↑↓
+                </kbd>
+                navigate
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                  ↵
+                </kbd>
+                select
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                  tab
+                </kbd>
+                filter
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="bg-bg-tertiary px-1 py-0.5 rounded border border-border-secondary">
+                  esc
+                </kbd>
+                close
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Command className="w-3 h-3" />
+              <span>K</span>
+            </div>
+          </div>
+        )}
       </PrelineModal.Body>
     </PrelineModal>
   );
