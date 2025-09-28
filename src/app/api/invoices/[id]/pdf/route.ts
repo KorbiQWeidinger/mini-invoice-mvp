@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { invoiceService } from "@/db/database";
 import { type Invoice, type InvoiceItem } from "@/db/database";
-import { PDFService } from "@/client/common/utils/pdf-service";
+import { PDFService } from "@/server/utils/pdf-service";
 
 // GET /api/invoices/[id]/pdf - Generate and download ZUGFeRD/Factur-X PDF
 export async function GET(

@@ -249,6 +249,7 @@ export function DataTable<T extends Record<string, unknown>>({
       `Updating total pages: data.length=${data.length}, pageSize=${state.pageSize}, totalPages=${newTotalPages}`
     );
     state.setTotalPages(newTotalPages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.length, state.pageSize, state.setTotalPages]);
 
   // Show mobile card view
