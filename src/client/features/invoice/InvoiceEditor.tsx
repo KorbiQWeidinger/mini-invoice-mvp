@@ -244,7 +244,7 @@ export function InvoiceEditor({
   ];
 
   // Transform editor data to InvoiceView format for live preview
-  const getPreviewData = (): Invoice & { invoice_items: InvoiceItem[] } => {
+  const getPreviewData = () => {
     const previewItems: InvoiceItem[] = items
       .filter((item) => item.description.trim())
       .map((item) => ({
@@ -258,7 +258,7 @@ export function InvoiceEditor({
         created_at: new Date().toISOString().split("T")[0],
       }));
 
-    return {
+    const previewInvoice: Invoice & { invoice_items: InvoiceItem[] } = {
       id: "preview",
       user_id: "preview",
       invoice_number: invoice.invoice_number || previewInvoiceNumber,
@@ -277,6 +277,8 @@ export function InvoiceEditor({
       updated_at: previewDate,
       invoice_items: previewItems,
     };
+
+    return previewInvoice;
   };
 
   return (

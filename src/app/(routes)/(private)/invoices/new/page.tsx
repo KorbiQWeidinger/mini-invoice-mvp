@@ -1,12 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-  invoiceService,
-  invoiceItemService,
-  type InvoiceInsert,
-  type InvoiceItemInsert,
-} from "@/db/database";
+import { invoiceApiService } from "@/client/api/invoices";
+import type { InvoiceInsert, InvoiceItemInsert } from "@/db/database";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
@@ -23,18 +19,15 @@ export default function CreateInvoicePage() {
     setLoading(true);
 
     try {
-      // Create invoice
-      const createdInvoice = await invoiceService.create(invoiceData);
+      // Create invoice with items via API
+      const invoiceWithItems = {
+        ...invoiceData,
+        items: itemsData,
+      };
 
-      // Create invoice items
-      for (const item of itemsData) {
-        await invoiceItemService.create({
-          ...item,
-          invoice_id: createdInvoice.id,
-        });
-      }
+      const createdInvoice = await invoiceApiService.create(invoiceWithItems);
 
-      router.push("/invoices");
+      router.push(`/invoices/${createdInvoice.id}`);
     } catch (error) {
       console.error("Error creating invoice:", error);
       alert("Failed to create invoice");
