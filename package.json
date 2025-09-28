@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@e-invoice-eu/core": "^2.1.11",
     "@heroicons/react": "^2.2.0",
     "@preline/select": "^3.2.3",
     "@preline/theme-switch": "^3.2.3",
@@ -17,18 +18,23 @@
     "@tailwindcss/forms": "^0.5.10",
     "@types/jquery": "^3.5.33",
     "datatables.net-dt": "^2.3.4",
+    "defu": "^6.1.4",
     "dotenv": "^17.2.2",
+    "fast-xml-parser": "^5.2.5",
     "jquery": "^3.7.1",
+    "libxmljs2": "^0.37.0",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
+    "pdf-lib": "^1.17.1",
     "preline": "^3.2.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
