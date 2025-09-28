@@ -81,8 +81,8 @@ export function InvoiceView({ invoice, isPreview = false }: InvoiceViewProps) {
   };
 
   const containerClass = isPreview
-    ? "max-w-none p-4 bg-white shadow-md border border-border-primary rounded-lg"
-    : "max-w-4xl mx-auto p-8 bg-white shadow-lg";
+    ? "max-w-none p-4 bg-bg-primary shadow-md border border-border-primary rounded-lg"
+    : "max-w-4xl mx-auto p-8 bg-bg-primary shadow-lg";
 
   return (
     <PrelineCard className={containerClass}>
@@ -177,7 +177,7 @@ export function InvoiceView({ invoice, isPreview = false }: InvoiceViewProps) {
           refreshable={false}
           paginated={false}
           emptyMessage="No items found for this invoice."
-          className="[&_.bg-bg-primary]:!bg-transparent [&_table]:border-collapse [&_th]:text-right [&_th:first-child]:text-left [&_td]:text-right [&_td:first-child]:text-left [&_th]:px-4 [&_th]:py-3 [&_td]:px-4 [&_td]:py-4"
+          className="[&_.bg-bg-secondary]:!bg-transparent [&_table]:border-collapse [&_th]:text-right [&_th:first-child]:text-left [&_td]:text-right [&_td:first-child]:text-left [&_th]:px-4 [&_th]:py-3 [&_td]:px-4 [&_td]:py-4"
         />
       </div>
 
