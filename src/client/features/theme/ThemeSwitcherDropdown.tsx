@@ -2,14 +2,10 @@
 
 import { useTheme } from "./ThemeProvider";
 import { Sun, Moon, Coffee } from "lucide-react";
-import { usePrelineReinit } from "@/client/common/hooks/usePrelineReinit";
 import { PrelineDropdown } from "@/client/common/components/ui/PrelineDropdown";
 
 export default function ThemeSwitcherDropdown() {
   const { theme, setTheme } = useTheme();
-
-  // Reinitialize Preline components after navigation
-  usePrelineReinit();
 
   const themes = [
     { value: "light", label: "Light", icon: <Sun className="w-4 h-4" /> },

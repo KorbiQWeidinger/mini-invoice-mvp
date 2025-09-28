@@ -2,6 +2,7 @@
 
 import { forwardRef, useId } from "react";
 import { ChevronDown } from "lucide-react";
+import { usePrelineReinit } from "../../hooks/usePrelineReinit";
 
 interface PrelineDropdownProps {
   label?: string;
@@ -182,6 +183,9 @@ export const PrelineDropdown = forwardRef<HTMLDivElement, PrelineDropdownProps>(
     },
     ref
   ) => {
+    // Ensure Preline components are initialized for dropdown functionality
+    usePrelineReinit();
+
     const generatedId = useId();
     const dropdownId = id || name || generatedId;
     const buttonId = `hs-dropdown-${dropdownId}`;

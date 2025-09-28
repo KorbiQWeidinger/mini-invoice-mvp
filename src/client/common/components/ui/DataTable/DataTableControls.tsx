@@ -4,7 +4,6 @@ import { RefreshCw, Search } from "lucide-react";
 import { PrelineInput } from "../PrelineInput";
 import { PrelineButton } from "../PrelineButton";
 import { PrelineDropdown } from "../PrelineDropdown";
-import { usePrelineReinit } from "../../../hooks/usePrelineReinit";
 
 interface DataTableControlsProps {
   searchable: boolean;
@@ -25,9 +24,6 @@ export function DataTableControls({
   onRefresh,
   onPageSizeChange,
 }: DataTableControlsProps) {
-  // Initialize Preline components
-  usePrelineReinit();
-
   return (
     <div className="bg-bg-primary border border-border-primary rounded-lg p-4 shadow-sm">
       <div className="flex flex-wrap items-center gap-4">

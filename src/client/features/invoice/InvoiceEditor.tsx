@@ -52,6 +52,10 @@ export function InvoiceEditor({
   loading = false,
   submitLabel = "Create Invoice",
 }: InvoiceEditorProps) {
+  // Generate stable values for preview to avoid hydration issues
+  const [previewInvoiceNumber] = useState(() => `INV-PREVIEW`);
+  const [previewDate] = useState(() => new Date().toISOString().split("T")[0]);
+
   // Status options for the dropdown
   const statusOptions = [
     { value: "draft", label: "Draft" },
@@ -246,30 +250,31 @@ export function InvoiceEditor({
       .map((item) => ({
         id: item.id,
         invoice_id: "preview",
+        user_id: "preview",
         description: item.description,
         quantity: item.quantity,
         unit_price: item.unit_price,
         line_total: item.line_total,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        created_at: new Date().toISOString().split("T")[0],
       }));
 
     return {
       id: "preview",
-      invoice_number: invoice.invoice_number || `INV-${Date.now()}`,
+      user_id: "preview",
+      invoice_number: invoice.invoice_number || previewInvoiceNumber,
       customer_name: invoice.customer_name || "Customer Name",
       customer_email: invoice.customer_email || null,
       customer_address: invoice.customer_address || null,
-      issue_date: invoice.issue_date || new Date().toISOString().split("T")[0],
-      due_date: invoice.due_date || new Date().toISOString().split("T")[0],
+      issue_date: invoice.issue_date || previewDate,
+      due_date: invoice.due_date || previewDate,
       status: invoice.status || "draft",
       subtotal: invoice.subtotal || 0,
       tax_rate: invoice.tax_rate || 0,
       tax_amount: invoice.tax_amount || 0,
       total_amount: invoice.total_amount || 0,
       notes: invoice.notes || null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: previewDate,
+      updated_at: previewDate,
       invoice_items: previewItems,
     };
   };
