@@ -9,7 +9,8 @@ import {
 } from "@/db/database";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/client/common/components/PageHeader";
-import { InvoiceEditor } from "@/client/common/components/Invoice/InvoiceEditor";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
+import { InvoiceEditor } from "@/client/features/invoice/InvoiceEditor";
 
 export default function CreateInvoicePage() {
   const router = useRouter();
@@ -48,14 +49,18 @@ export default function CreateInvoicePage() {
 
   return (
     <div className="p-6">
-      <PageHeader
-        title="Create Invoice"
-        subtitle="Create a new invoice for your customer"
-      />
+      <div className="flex justify-between items-center mb-8">
+        <PageHeader
+          title="Create Invoice"
+          subtitle="Create a new invoice for your customer"
+        />
+        <PrelineButton type="button" variant="secondary" onClick={handleCancel}>
+          Cancel
+        </PrelineButton>
+      </div>
 
       <InvoiceEditor
         onSubmit={handleSubmit}
-        onCancel={handleCancel}
         loading={loading}
         submitLabel="Create Invoice"
       />

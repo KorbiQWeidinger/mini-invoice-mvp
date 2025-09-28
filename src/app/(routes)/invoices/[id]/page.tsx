@@ -4,7 +4,8 @@ import { invoiceService } from "@/db/database";
 import { notFound } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/client/common/components/PageHeader";
-import { InvoiceView } from "@/client/common/components/Invoice/InvoiceView";
+import { InvoiceView } from "@/client/features/invoice/InvoiceView";
+import { DownloadPDFButton } from "@/client/features/invoice/DownloadPDFButton";
 import { useState, useEffect } from "react";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 import { type Invoice, type InvoiceItem } from "@/db/database";
@@ -82,10 +83,15 @@ export default function InvoiceDetailPage({ params }: InvoiceDetailPageProps) {
           invoice.created_at
         ).toLocaleDateString()}`}
         actions={
-          <div className="flex space-x-3">
+          <div className="flex flex-wrap gap-3">
             <PrelineButton variant="secondary" onClick={handleBack}>
               Back to Invoices
             </PrelineButton>
+            <DownloadPDFButton
+              invoiceId={invoice.id}
+              invoiceNumber={invoice.invoice_number}
+              variant="secondary"
+            />
             <PrelineButton onClick={handleEdit}>Edit Invoice</PrelineButton>
           </div>
         }

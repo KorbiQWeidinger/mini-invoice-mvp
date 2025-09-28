@@ -1,23 +1,64 @@
 "use client";
 
-import { useState } from "react";
 import { type Invoice, type InvoiceItem } from "@/db/database";
 import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
-import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
-import { Download } from "lucide-react";
+import { DataTable } from "@/client/common/components/ui/DataTable";
+import type { DataTableColumn } from "@/client/common/components/ui/DataTable";
 
 interface InvoiceViewProps {
   invoice: Invoice & { invoice_items?: InvoiceItem[] };
+  isPreview?: boolean;
 }
 
-export function InvoiceView({ invoice }: InvoiceViewProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
-
+export function InvoiceView({ invoice, isPreview = false }: InvoiceViewProps) {
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
     }).format(amount);
+
+  // Define columns for the DataTable
+  const invoiceItemColumns: DataTableColumn<InvoiceItem>[] = [
+    {
+      key: "description",
+      header: "Description",
+      sortable: true,
+      searchable: true,
+      render: (item) => (
+        <span className="text-text-primary font-medium">
+          {item.description}
+        </span>
+      ),
+    },
+    {
+      key: "quantity",
+      header: "Quantity",
+      sortable: true,
+      render: (item) => (
+        <span className="text-text-secondary">{item.quantity}</span>
+      ),
+    },
+    {
+      key: "unit_price",
+      header: "Unit Price",
+      sortable: true,
+      render: (item) => (
+        <span className="text-text-secondary">
+          {formatCurrency(item.unit_price)}
+        </span>
+      ),
+    },
+    {
+      key: "line_total",
+      header: "Total",
+      sortable: true,
+      render: (item) => (
+        <span className="text-text-primary font-medium">
+          {formatCurrency(item.line_total)}
+        </span>
+      ),
+    },
+  ];
 
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
@@ -39,34 +80,12 @@ export function InvoiceView({ invoice }: InvoiceViewProps) {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    setIsDownloading(true);
-    try {
-      const response = await fetch(`/api/invoices/${invoice.id}/pdf`);
-
-      if (!response.ok) {
-        throw new Error("Failed to generate PDF");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `invoice-${invoice.invoice_number}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      // You could add a toast notification here
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  const containerClass = isPreview
+    ? "max-w-none p-4 bg-white shadow-md border border-border-primary rounded-lg"
+    : "max-w-4xl mx-auto p-8 bg-white shadow-lg";
 
   return (
-    <PrelineCard className="max-w-4xl mx-auto p-8 bg-white shadow-lg">
+    <PrelineCard className={containerClass}>
       {/* Invoice Header */}
       <div className="flex justify-between items-start mb-8 pb-6 border-b-2 border-border-primary">
         <div>
@@ -76,15 +95,6 @@ export function InvoiceView({ invoice }: InvoiceViewProps) {
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <PrelineButton
-            variant="secondary"
-            size="sm"
-            onClick={handleDownloadPDF}
-            loading={isDownloading}
-            icon={<Download />}
-          >
-            Download PDF
-          </PrelineButton>
           <span
             className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(
               invoice.status
@@ -153,53 +163,22 @@ export function InvoiceView({ invoice }: InvoiceViewProps) {
 
       {/* Invoice Items Table */}
       <div className="mb-8">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-bg-tertiary">
-              <th className="px-4 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider border-b border-border-primary">
-                Description
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider border-b border-border-primary">
-                Quantity
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider border-b border-border-primary">
-                Unit Price
-              </th>
-              <th className="px-4 py-3 text-right text-xs font-medium text-text-secondary uppercase tracking-wider border-b border-border-primary">
-                Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoice.invoice_items && invoice.invoice_items.length > 0 ? (
-              invoice.invoice_items.map((item: InvoiceItem) => (
-                <tr key={item.id} className="border-b border-border-primary">
-                  <td className="px-4 py-4 text-text-primary">
-                    {item.description}
-                  </td>
-                  <td className="px-4 py-4 text-right text-text-secondary">
-                    {item.quantity}
-                  </td>
-                  <td className="px-4 py-4 text-right text-text-secondary">
-                    {formatCurrency(item.unit_price)}
-                  </td>
-                  <td className="px-4 py-4 text-right text-text-primary font-medium">
-                    {formatCurrency(item.line_total)}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={4}
-                  className="px-4 py-8 text-center text-text-secondary"
-                >
-                  No items found for this invoice.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <h3 className="text-lg font-semibold text-text-primary mb-4">Items</h3>
+        <DataTable
+          key={`invoice-items-table-${(invoice.invoice_items || []).length}-${(
+            invoice.invoice_items || []
+          )
+            .map((i) => i.id)
+            .join("-")}`}
+          data={invoice.invoice_items || []}
+          columns={invoiceItemColumns}
+          searchable={false}
+          filterable={false}
+          refreshable={false}
+          paginated={false}
+          emptyMessage="No items found for this invoice."
+          className="[&_.bg-bg-primary]:!bg-transparent [&_table]:border-collapse [&_th]:text-right [&_th:first-child]:text-left [&_td]:text-right [&_td:first-child]:text-left [&_th]:px-4 [&_th]:py-3 [&_td]:px-4 [&_td]:py-4"
+        />
       </div>
 
       {/* Totals Section */}

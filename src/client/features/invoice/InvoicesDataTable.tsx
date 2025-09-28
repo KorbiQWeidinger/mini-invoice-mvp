@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { invoiceService, type Invoice } from "@/db/database";
-import { PrelineConfirmationModal } from "../ui/PrelineModal";
+import { PrelineConfirmationModal } from "@/client/common/components/ui/PrelineModal";
 import {
   DataTable,
   type DataTableColumn,
   type DataTableAction,
   type DataTableFilter,
-} from "../ui/DataTable/index";
+} from "@/client/common/components/ui/DataTable/index";
 import { Eye, Edit, Trash2 } from "lucide-react";
-import { PrelineBadge } from "../ui/PrelineBadge";
+import { PrelineBadge } from "@/client/common/components/ui/PrelineBadge";
 import { usePrelineReinit } from "@/client/common/hooks/usePrelineReinit";
 
 interface InvoicesDataTableProps {
@@ -22,8 +22,6 @@ export default function InvoicesDataTable({
 }: InvoicesDataTableProps) {
   usePrelineReinit();
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
-  const [filteredInvoices, setFilteredInvoices] =
-    useState<Invoice[]>(initialInvoices);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
     invoiceId: string | null;
@@ -40,7 +38,6 @@ export default function InvoicesDataTable({
       try {
         const updatedInvoices = await invoiceService.getAll();
         setInvoices(updatedInvoices);
-        setFilteredInvoices(updatedInvoices);
       } catch (error) {
         console.error("Error refreshing invoices:", error);
       }
@@ -86,11 +83,6 @@ export default function InvoicesDataTable({
       setInvoices(
         invoices.filter((invoice) => invoice.id !== deleteModal.invoiceId)
       );
-      setFilteredInvoices(
-        filteredInvoices.filter(
-          (invoice) => invoice.id !== deleteModal.invoiceId
-        )
-      );
       closeDeleteModal();
     } catch (error) {
       console.error("Error deleting invoice:", error);
@@ -105,55 +97,10 @@ export default function InvoicesDataTable({
     try {
       const updatedInvoices = await invoiceService.getAll();
       setInvoices(updatedInvoices);
-      setFilteredInvoices(updatedInvoices);
     } catch (error) {
       console.error("Error refreshing invoices:", error);
       alert("Failed to refresh invoices. Please try again.");
     }
-  };
-
-  const handleSearch = (query: string) => {
-    if (!query.trim()) {
-      setFilteredInvoices(invoices);
-      return;
-    }
-
-    const filtered = invoices.filter(
-      (invoice) =>
-        invoice.invoice_number.toLowerCase().includes(query.toLowerCase()) ||
-        invoice.customer_name.toLowerCase().includes(query.toLowerCase()) ||
-        invoice.customer_email?.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredInvoices(filtered);
-  };
-
-  const handleFilter = (filters: Record<string, string>) => {
-    let filtered = invoices;
-
-    // Apply search filter
-    if (filters.search) {
-      filtered = filtered.filter(
-        (invoice) =>
-          invoice.invoice_number
-            .toLowerCase()
-            .includes(filters.search.toLowerCase()) ||
-          invoice.customer_name
-            .toLowerCase()
-            .includes(filters.search.toLowerCase()) ||
-          invoice.customer_email
-            ?.toLowerCase()
-            .includes(filters.search.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (filters.status) {
-      filtered = filtered.filter(
-        (invoice) => invoice.status === filters.status
-      );
-    }
-
-    setFilteredInvoices(filtered);
   };
 
   // Define columns for the DataTable
@@ -161,6 +108,8 @@ export default function InvoicesDataTable({
     {
       key: "invoice_number",
       header: "Invoice #",
+      sortable: true,
+      searchable: true,
       render: (invoice: Invoice) => (
         <span className="font-medium text-text-primary">
           {invoice.invoice_number}
@@ -168,8 +117,10 @@ export default function InvoicesDataTable({
       ),
     },
     {
-      key: "customer",
+      key: "customer_name",
       header: "Customer",
+      sortable: true,
+      searchable: true,
       render: (invoice: Invoice) => (
         <div>
           <div className="text-sm text-text-primary font-medium">
@@ -184,6 +135,7 @@ export default function InvoicesDataTable({
     {
       key: "issue_date",
       header: "Issue Date",
+      sortable: true,
       render: (invoice: Invoice) => (
         <span className="text-text-secondary">
           {new Date(invoice.issue_date).toLocaleDateString()}
@@ -193,6 +145,7 @@ export default function InvoicesDataTable({
     {
       key: "due_date",
       header: "Due Date",
+      sortable: true,
       render: (invoice: Invoice) => (
         <span className="text-text-secondary">
           {new Date(invoice.due_date).toLocaleDateString()}
@@ -202,6 +155,7 @@ export default function InvoicesDataTable({
     {
       key: "total_amount",
       header: "Amount",
+      sortable: true,
       render: (invoice: Invoice) => (
         <span className="text-text-secondary">
           ${invoice.total_amount.toFixed(2)}
@@ -211,6 +165,8 @@ export default function InvoicesDataTable({
     {
       key: "status",
       header: "Status",
+      sortable: true,
+      searchable: true,
       render: (invoice: Invoice) => {
         const getStatusVariant = (status: string) => {
           switch (status) {
@@ -251,6 +207,8 @@ export default function InvoicesDataTable({
       onClick: (invoice: Invoice) => {
         window.location.href = `/invoices/${invoice.id}/edit`;
       },
+      variant: "ghost",
+      disabled: (invoice: Invoice) => invoice.status === "paid",
     },
     {
       label: "Delete Invoice",
@@ -280,18 +238,16 @@ export default function InvoicesDataTable({
   return (
     <div className="space-y-6">
       <DataTable
-        data={filteredInvoices}
+        data={invoices}
         columns={columns}
         actions={actions}
         searchable={true}
         filterable={true}
         refreshable={true}
         onRefresh={handleRefresh}
-        onSearch={handleSearch}
-        onFilter={handleFilter}
+        filters={filters}
         title="Invoice Management"
         emptyMessage="No invoices found"
-        filters={filters}
       />
 
       {/* Delete Confirmation Modal */}

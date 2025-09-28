@@ -11,7 +11,8 @@ import {
   type InvoiceItem,
 } from "@/db/database";
 import { PageHeader } from "@/client/common/components/PageHeader";
-import { InvoiceEditor } from "@/client/common/components/Invoice/InvoiceEditor";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
+import { InvoiceEditor } from "@/client/features/invoice/InvoiceEditor";
 
 interface EditInvoicePageProps {
   params: Promise<{ id: string }>;
@@ -113,16 +114,20 @@ export default function EditInvoicePage({ params }: EditInvoicePageProps) {
 
   return (
     <div className="p-6">
-      <PageHeader
-        title={`Edit Invoice ${invoice.invoice_number}`}
-        subtitle="Update invoice details and items"
-      />
+      <div className="flex justify-between items-center mb-8">
+        <PageHeader
+          title={`Edit Invoice ${invoice.invoice_number}`}
+          subtitle="Update invoice details and items"
+        />
+        <PrelineButton type="button" variant="secondary" onClick={handleCancel}>
+          Cancel
+        </PrelineButton>
+      </div>
 
       <InvoiceEditor
         initialInvoice={invoice}
         initialItems={items}
         onSubmit={handleSubmit}
-        onCancel={handleCancel}
         loading={loading}
         submitLabel="Update Invoice"
       />

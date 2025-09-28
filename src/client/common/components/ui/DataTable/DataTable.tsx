@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useBreakpoint } from "../../../hooks/useBreakpoint";
 import { DataTableCardView } from "./DataTableCardView";
 import { DataTableFilters } from "./DataTableFilters";
@@ -30,13 +30,26 @@ interface DataTableProps<T> {
     options?: { value: string; label: string }[];
     placeholder?: string;
   }>;
+  paginated?: boolean;
 }
 
-function useDataTableState() {
+type SortDirection = "asc" | "desc" | null;
+
+interface SortState {
+  column: string | null;
+  direction: SortDirection;
+}
+
+function useDataTableState(itemsPerPage: number = 5) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [sortState, setSortState] = useState<SortState>({
+    column: null,
+    direction: null,
+  });
 
   return {
     searchQuery,
@@ -47,102 +60,19 @@ function useDataTableState() {
     setCurrentPage,
     totalPages,
     setTotalPages,
+    filters,
+    setFilters,
+    sortState,
+    setSortState,
   };
-}
-
-function useDataTableEffects(
-  isMobile: boolean,
-  pageSize: number,
-  setCurrentPage: (page: number) => void,
-  setTotalPages: (pages: number) => void
-) {
-  const tableRef = useRef<HTMLTableElement>(null);
-  const dataTableRef = useRef<DataTableInstance | null>(null);
-  const tableId = useId();
-
-  useEffect(() => {
-    const currentTableRef = tableRef.current;
-
-    if (!isMobile && currentTableRef && !dataTableRef.current) {
-      initializeDataTable(currentTableRef, pageSize, dataTableRef);
-    }
-
-    return () => {
-      cleanupDataTable(dataTableRef, currentTableRef);
-    };
-  }, [isMobile, pageSize, setCurrentPage, setTotalPages]);
-
-  return { tableRef, dataTableRef, tableId };
-}
-
-function initializeDataTable(
-  currentTableRef: HTMLTableElement,
-  pageSize: number,
-  dataTableRef: React.MutableRefObject<DataTableInstance | null>
-) {
-  import("jquery").then((jQuery) => {
-    import("datatables.net-dt").then(() => {
-      const $ = jQuery.default;
-
-      if (currentTableRef && !$.fn.DataTable.isDataTable(currentTableRef)) {
-        try {
-          dataTableRef.current = (
-            $(currentTableRef) as JQueryDataTable
-          ).DataTable({
-            responsive: true,
-            pageLength: pageSize,
-            lengthMenu: [5, 10, 25, 50, 100],
-            language: {
-              search: "",
-              searchPlaceholder: "Search...",
-              lengthMenu: "Show _MENU_ entries",
-              info: "Showing _START_ to _END_ of _TOTAL_ entries",
-              paginate: {
-                first: "First",
-                last: "Last",
-                next: "Next",
-                previous: "Previous",
-              },
-            },
-            dom: "rt",
-            columnDefs: [
-              {
-                targets: -1,
-                orderable: false,
-                searchable: false,
-              },
-            ],
-          });
-        } catch (error) {
-          console.warn("Error initializing DataTable:", error);
-        }
-      }
-    });
-  });
-}
-
-function cleanupDataTable(
-  dataTableRef: React.MutableRefObject<DataTableInstance | null>,
-  currentTableRef: HTMLTableElement | null
-) {
-  if (dataTableRef.current && currentTableRef) {
-    try {
-      // Destroy the DataTable instance
-      dataTableRef.current.destroy();
-    } catch (error) {
-      console.warn("Error destroying DataTable:", error);
-    } finally {
-      dataTableRef.current = null;
-    }
-  }
 }
 
 function useDataTableHandlers(
   setSearchQuery: (query: string) => void,
   setPageSize: (size: number) => void,
   setCurrentPage: (page: number) => void,
-  setTotalPages: (pages: number) => void,
-  dataLength: number,
+  setFilters: (filters: Record<string, string>) => void,
+  setSortState: React.Dispatch<React.SetStateAction<SortState>>,
   onSearch?: (query: string) => void,
   onFilter?: (filters: Record<string, string>) => void,
   onRefresh?: () => void
@@ -156,10 +86,36 @@ function useDataTableHandlers(
   };
 
   const handleFilters = (newFilters: Record<string, string>) => {
+    setFilters(newFilters);
     setCurrentPage(1); // Reset to first page when filtering
     if (onFilter) {
       onFilter(newFilters);
     }
+  };
+
+  const handleSort = (columnKey: string) => {
+    setSortState((prevState: SortState) => {
+      if (prevState.column === columnKey) {
+        // Cycle through: asc -> desc -> null
+        const newDirection: SortDirection =
+          prevState.direction === "asc"
+            ? "desc"
+            : prevState.direction === "desc"
+            ? null
+            : "asc";
+        return {
+          column: newDirection ? columnKey : null,
+          direction: newDirection,
+        };
+      } else {
+        // New column, start with asc
+        return {
+          column: columnKey,
+          direction: "asc" as SortDirection,
+        };
+      }
+    });
+    setCurrentPage(1); // Reset to first page when sorting
   };
 
   const handleRefresh = () => {
@@ -182,6 +138,7 @@ function useDataTableHandlers(
   return {
     handleSearch,
     handleFilters,
+    handleSort,
     handleRefresh,
     handlePageSizeChange,
     handlePageChange,
@@ -198,6 +155,93 @@ function calculatePaginationInfo(
   return { startIndex, endIndex };
 }
 
+function filterData<T>(
+  data: T[],
+  searchQuery: string,
+  filters: Record<string, string>,
+  columns: DataTableColumn<T>[]
+): T[] {
+  let filteredData = [...data];
+
+  // Apply search filter
+  if (searchQuery.trim()) {
+    const searchLower = searchQuery.toLowerCase();
+    filteredData = filteredData.filter((row) => {
+      return columns.some((column) => {
+        if (column.searchable === false) return false;
+
+        const value = row[column.key as keyof T];
+        if (value == null) return false;
+
+        return String(value).toLowerCase().includes(searchLower);
+      });
+    });
+  }
+
+  // Apply column filters
+  Object.entries(filters).forEach(([filterKey, filterValue]) => {
+    if (filterValue && filterValue.trim()) {
+      filteredData = filteredData.filter((row) => {
+        const value = row[filterKey as keyof T];
+        if (value == null) return false;
+
+        return String(value).toLowerCase().includes(filterValue.toLowerCase());
+      });
+    }
+  });
+
+  return filteredData;
+}
+
+function sortData<T>(
+  data: T[],
+  sortState: SortState,
+  columns: DataTableColumn<T>[]
+): T[] {
+  if (!sortState.column || !sortState.direction) {
+    return data;
+  }
+
+  const column = columns.find(
+    (col) => col.key === sortState.column || col.sortKey === sortState.column
+  );
+
+  if (!column || column.sortable === false) {
+    return data;
+  }
+
+  const sortKey = (column.sortKey || column.key) as keyof T;
+
+  return [...data].sort((a, b) => {
+    const aValue = a[sortKey];
+    const bValue = b[sortKey];
+
+    // Handle null/undefined values
+    if (aValue == null && bValue == null) return 0;
+    if (aValue == null) return sortState.direction === "asc" ? 1 : -1;
+    if (bValue == null) return sortState.direction === "asc" ? -1 : 1;
+
+    // Handle different data types
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortState.direction === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    if (aValue instanceof Date && bValue instanceof Date) {
+      return sortState.direction === "asc"
+        ? aValue.getTime() - bValue.getTime()
+        : bValue.getTime() - aValue.getTime();
+    }
+
+    // Default string comparison
+    const aStr = String(aValue).toLowerCase();
+    const bStr = String(bValue).toLowerCase();
+
+    if (aStr < bStr) return sortState.direction === "asc" ? -1 : 1;
+    if (aStr > bStr) return sortState.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+}
+
 export function DataTable<T extends Record<string, unknown>>({
   data,
   columns,
@@ -211,46 +255,47 @@ export function DataTable<T extends Record<string, unknown>>({
   className = "",
   title,
   emptyMessage = "No data available",
-  filters: _filters = [], // eslint-disable-line @typescript-eslint/no-unused-vars
+  filters: filterDefinitions = [],
+  paginated = true,
 }: DataTableProps<T>) {
   const { isMobile } = useBreakpoint();
-  const state = useDataTableState();
-  const { tableRef, tableId } = useDataTableEffects(
-    isMobile,
-    state.pageSize,
-    state.setCurrentPage,
-    state.setTotalPages
-  );
+  const state = useDataTableState(paginated ? 5 : data.length);
 
   const handlers = useDataTableHandlers(
     state.setSearchQuery,
     state.setPageSize,
     state.setCurrentPage,
-    state.setTotalPages,
-    data.length,
+    state.setFilters,
+    state.setSortState,
     onSearch,
     onFilter,
     onRefresh
   );
 
+  // Process data: filter -> sort -> paginate
+  const filteredData = filterData(
+    data,
+    state.searchQuery,
+    state.filters,
+    columns
+  );
+  const sortedData = sortData(filteredData, state.sortState, columns);
+
   const { startIndex, endIndex } = calculatePaginationInfo(
     state.currentPage,
     state.pageSize,
-    data.length
+    sortedData.length
   );
 
   // Calculate paginated data
-  const paginatedData = data.slice(startIndex - 1, endIndex);
+  const paginatedData = sortedData.slice(startIndex - 1, endIndex);
 
-  // Update total pages when data or page size changes
+  // Update total pages when filtered data or page size changes
   React.useEffect(() => {
-    const newTotalPages = Math.ceil(data.length / state.pageSize);
-    console.log(
-      `Updating total pages: data.length=${data.length}, pageSize=${state.pageSize}, totalPages=${newTotalPages}`
-    );
+    const newTotalPages = Math.ceil(sortedData.length / state.pageSize);
     state.setTotalPages(newTotalPages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.length, state.pageSize, state.setTotalPages]);
+  }, [sortedData.length, state.pageSize, state.setTotalPages]);
 
   // Show mobile card view
   if (isMobile) {
@@ -261,6 +306,7 @@ export function DataTable<T extends Record<string, unknown>>({
             searchable={searchable}
             filterable={filterable}
             refreshable={refreshable}
+            filters={filterDefinitions}
             onSearch={handlers.handleSearch}
             onFilter={handlers.handleFilters}
             onRefresh={handlers.handleRefresh}
@@ -269,7 +315,7 @@ export function DataTable<T extends Record<string, unknown>>({
         )}
 
         <DataTableCardView
-          data={data}
+          data={sortedData}
           columns={columns}
           actions={actions}
           emptyMessage={emptyMessage}
@@ -281,15 +327,17 @@ export function DataTable<T extends Record<string, unknown>>({
   // Desktop table view
   return (
     <div className={`space-y-6 ${className}`}>
-      <DataTableControls
-        searchable={searchable}
-        refreshable={refreshable}
-        searchQuery={state.searchQuery}
-        pageSize={state.pageSize}
-        onSearch={handlers.handleSearch}
-        onRefresh={handlers.handleRefresh}
-        onPageSizeChange={handlers.handlePageSizeChange}
-      />
+      {(searchable || refreshable) && (
+        <DataTableControls
+          searchable={searchable}
+          refreshable={refreshable}
+          searchQuery={state.searchQuery}
+          pageSize={state.pageSize}
+          onSearch={handlers.handleSearch}
+          onRefresh={handlers.handleRefresh}
+          onPageSizeChange={handlers.handlePageSizeChange}
+        />
+      )}
 
       {/* Table Card */}
       <div className="bg-bg-primary border border-border-primary rounded-lg shadow-sm overflow-hidden">
@@ -297,15 +345,15 @@ export function DataTable<T extends Record<string, unknown>>({
         <div className="overflow-x-auto">
           <div className="min-w-full inline-block align-middle">
             <div className="overflow-hidden">
-              <table
-                key={`datatable-${tableId}`}
-                ref={tableRef}
-                className="min-w-full divide-y divide-border-primary"
-                id={tableId}
-              >
-                <DataTableHeader columns={columns} actions={actions} />
+              <table className="min-w-full divide-y divide-border-primary">
+                <DataTableHeader
+                  columns={columns}
+                  actions={actions}
+                  sortState={state.sortState}
+                  onSort={handlers.handleSort}
+                />
                 <tbody className="bg-bg-primary divide-y divide-border-primary">
-                  {data.length === 0 ? (
+                  {paginatedData.length === 0 ? (
                     <tr>
                       <td
                         colSpan={columns.length + (actions.length > 0 ? 1 : 0)}
@@ -334,14 +382,16 @@ export function DataTable<T extends Record<string, unknown>>({
           </div>
         </div>
 
-        <DataTablePagination
-          currentPage={state.currentPage}
-          totalPages={state.totalPages}
-          startIndex={startIndex}
-          endIndex={endIndex}
-          totalItems={data.length}
-          onPageChange={handlers.handlePageChange}
-        />
+        {paginated && (
+          <DataTablePagination
+            currentPage={state.currentPage}
+            totalPages={state.totalPages}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            totalItems={sortedData.length}
+            onPageChange={handlers.handlePageChange}
+          />
+        )}
       </div>
     </div>
   );

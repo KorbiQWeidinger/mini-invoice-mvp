@@ -1,5 +1,5 @@
 import { invoiceService } from "@/db/database";
-import InvoicesDataTable from "@/client/common/components/Invoice/InvoicesDataTable";
+import InvoicesDataTable from "@/client/features/invoice/InvoicesDataTable";
 import { Plus } from "lucide-react";
 import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";

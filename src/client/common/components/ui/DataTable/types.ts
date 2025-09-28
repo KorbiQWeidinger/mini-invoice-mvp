@@ -7,6 +7,7 @@ export interface DataTableColumn<T> {
   sortable?: boolean;
   searchable?: boolean;
   width?: string;
+  sortKey?: keyof T | string; // Optional custom sort key
 }
 
 export interface DataTableAction<T> {
