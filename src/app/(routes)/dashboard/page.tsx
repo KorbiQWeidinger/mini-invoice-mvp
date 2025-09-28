@@ -1,6 +1,6 @@
 import { invoiceService } from "@/db/database";
 import { FileText, CheckCircle, Send, Edit } from "lucide-react";
-import PageHeader from "@/client/common/components/PageHeader";
+import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
 import { PrelineBadge } from "@/client/common/components/ui/PrelineBadge";

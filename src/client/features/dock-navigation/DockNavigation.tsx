@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, FileText, Plus, User, Terminal } from "lucide-react";
-import CommandPalette from "../command-palette/CommandPalette";
-import ThemeSwitcherPopup from "../theme/ThemeSwitcherPopup";
+import { CommandPalette } from "../command-palette/CommandPalette";
+import { ThemeSwitcherPopup } from "../theme/ThemeSwitcherPopup";
 import { useSettings } from "../settings/SettingsProvider";
 import { useBreakpoint } from "@/client/common/hooks/useBreakpoint";
 

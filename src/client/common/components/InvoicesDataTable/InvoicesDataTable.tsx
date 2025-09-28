@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { invoiceService, type Invoice } from "@/db/database";
-import ConfirmModal from "../ui/ConfirmModal";
+import { PrelineConfirmationModal } from "../ui/PrelineModal";
 import {
   DataTable,
   type DataTableColumn,
@@ -11,6 +11,7 @@ import {
 } from "../ui/DataTable/index";
 import { Eye, Edit, Trash2 } from "lucide-react";
 import { PrelineBadge } from "../ui/PrelineBadge";
+import { usePrelineReinit } from "@/client/common/hooks/usePrelineReinit";
 
 interface InvoicesDataTableProps {
   initialInvoices: Invoice[];
@@ -19,6 +20,7 @@ interface InvoicesDataTableProps {
 export default function InvoicesDataTable({
   initialInvoices,
 }: InvoicesDataTableProps) {
+  usePrelineReinit();
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
   const [filteredInvoices, setFilteredInvoices] =
     useState<Invoice[]>(initialInvoices);
@@ -92,7 +94,10 @@ export default function InvoicesDataTable({
       closeDeleteModal();
     } catch (error) {
       console.error("Error deleting invoice:", error);
-      alert("Failed to delete invoice");
+      // Show a more user-friendly error message
+      alert(
+        `Failed to delete invoice ${deleteModal.invoiceNumber}. Please try again.`
+      );
     }
   };
 
@@ -103,7 +108,7 @@ export default function InvoicesDataTable({
       setFilteredInvoices(updatedInvoices);
     } catch (error) {
       console.error("Error refreshing invoices:", error);
-      alert("Failed to refresh invoices");
+      alert("Failed to refresh invoices. Please try again.");
     }
   };
 
@@ -290,7 +295,7 @@ export default function InvoicesDataTable({
       />
 
       {/* Delete Confirmation Modal */}
-      <ConfirmModal
+      <PrelineConfirmationModal
         isOpen={deleteModal.isOpen}
         onClose={closeDeleteModal}
         onConfirm={handleDelete}

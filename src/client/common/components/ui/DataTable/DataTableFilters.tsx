@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Search, ChevronDown, RefreshCw } from "lucide-react";
+import { Search, RefreshCw } from "lucide-react";
 import { PrelineInput } from "../PrelineInput";
 import { PrelineDropdown } from "../PrelineDropdown";
 import type { DataTableFiltersProps } from "./types";
 
-export default function DataTableFilters({
+export function DataTableFilters({
   searchable = true,
   filterable = true,
   refreshable = true,
@@ -48,7 +48,7 @@ export default function DataTableFilters({
 
   return (
     <div
-      className={`bg-bg-primary shadow-lg rounded-xl border border-border-primary p-6 ${className}`}
+      className={`bg-bg-primary border border-border-primary rounded-lg shadow-sm p-6 ${className}`}
     >
       {title && (
         <div className="flex items-center justify-between mb-4">

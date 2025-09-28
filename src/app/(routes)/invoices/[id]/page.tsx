@@ -1,6 +1,6 @@
 import { invoiceService, type InvoiceItem } from "@/db/database";
 import { notFound } from "next/navigation";
-import PageHeader from "@/client/common/components/PageHeader";
+import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 
 interface InvoiceDetailPageProps {

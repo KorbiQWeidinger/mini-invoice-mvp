@@ -9,7 +9,7 @@ import {
 } from "@/db/database";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import PageHeader from "@/client/common/components/PageHeader";
+import { PageHeader } from "@/client/common/components/PageHeader";
 import { PrelineInput } from "@/client/common/components/ui/PrelineInput";
 import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 import { PrelineTextarea } from "@/client/common/components/ui/PrelineTextarea";

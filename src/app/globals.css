@@ -49,6 +49,8 @@
   --color-icon-success-hover: #059669;
   --color-icon-warning: #f59e0b;
   --color-icon-warning-hover: #d97706;
+  --color-icon-danger: #ef4444;
+  --color-icon-danger-hover: #dc2626;
   --color-icon-neutral: #6b7280;
   --color-icon-neutral-hover: #4b5563;
 
@@ -57,6 +59,10 @@
   --color-text-on-success: #ffffff;
   --color-text-on-warning: #ffffff;
   --color-text-on-error: #ffffff;
+  --color-text-on-danger: #ffffff;
+
+  /* Overlay/Backdrop Colors */
+  --color-overlay: rgba(15, 23, 42, 0.55);
 }
 
 /* Dark Theme */
@@ -98,6 +104,8 @@
   --color-icon-success-hover: #6ee7b7;
   --color-icon-warning: #fbbf24;
   --color-icon-warning-hover: #fcd34d;
+  --color-icon-danger: #f87171;
+  --color-icon-danger-hover: #fca5a5;
   --color-icon-neutral: #9ca3af;
   --color-icon-neutral-hover: #d1d5db;
 
@@ -106,6 +114,10 @@
   --color-text-on-success: #ffffff;
   --color-text-on-warning: #ffffff;
   --color-text-on-error: #ffffff;
+  --color-text-on-danger: #ffffff;
+
+  /* Overlay/Backdrop Colors */
+  --color-overlay: rgba(2, 6, 23, 0.6);
 }
 
 /* Coffee Theme */
@@ -147,6 +159,8 @@
   --color-icon-success-hover: #16a34a;
   --color-icon-warning: #f59e0b;
   --color-icon-warning-hover: #d97706;
+  --color-icon-danger: #ef4444;
+  --color-icon-danger-hover: #dc2626;
   --color-icon-neutral: #8b4513;
   --color-icon-neutral-hover: #a0522d;
 
@@ -155,6 +169,10 @@
   --color-text-on-success: #ffffff;
   --color-text-on-warning: #ffffff;
   --color-text-on-error: #ffffff;
+  --color-text-on-danger: #ffffff;
+
+  /* Overlay/Backdrop Colors */
+  --color-overlay: rgba(44, 24, 16, 0.55);
 }
 
 @theme inline {
@@ -199,6 +217,8 @@
   --color-icon-success-hover: var(--color-icon-success-hover);
   --color-icon-warning: var(--color-icon-warning);
   --color-icon-warning-hover: var(--color-icon-warning-hover);
+  --color-icon-danger: var(--color-icon-danger);
+  --color-icon-danger-hover: var(--color-icon-danger-hover);
   --color-icon-neutral: var(--color-icon-neutral);
   --color-icon-neutral-hover: var(--color-icon-neutral-hover);
 
@@ -207,6 +227,10 @@
   --color-text-on-success: var(--color-text-on-success);
   --color-text-on-warning: var(--color-text-on-warning);
   --color-text-on-error: var(--color-text-on-error);
+  --color-text-on-danger: var(--color-text-on-danger);
+
+  /* Overlay/Backdrop Colors */
+  --color-overlay: var(--color-overlay);
 }
 
 body {

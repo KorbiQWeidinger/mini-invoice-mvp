@@ -1,6 +1,10 @@
-export { default as DataTable } from "./DataTable";
-export { default as DataTableFilters } from "./DataTableFilters";
-export { default as DataTableCardView } from "./DataTableCardView";
+export { DataTable } from "./DataTable";
+export { DataTableFilters } from "./DataTableFilters";
+export { DataTableCardView } from "./DataTableCardView";
+export { DataTableControls } from "./DataTableControls";
+export { DataTableHeader } from "./DataTableHeader";
+export { DataTableRow } from "./DataTableRow";
+export { DataTablePagination } from "./DataTablePagination";
 export type {
   DataTableColumn,
   DataTableAction,

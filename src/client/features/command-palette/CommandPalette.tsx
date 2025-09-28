@@ -17,6 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useBreakpoint } from "@/client/common/hooks/useBreakpoint";
+import { PrelineModal } from "@/client/common/components/ui/PrelineModal";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ interface Command {
   keywords?: string[];
 }
 
-export default function CommandPalette({
+export function CommandPalette({
   isOpen,
   onClose,
   onOpenThemePopup,
@@ -248,9 +249,14 @@ export default function CommandPalette({
   if (!isOpen) return null;
 
   return (
-    <>
-      <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start justify-center pt-20">
-        <div className="bg-bg-primary border border-border-primary rounded-lg shadow-2xl ring-1 ring-border-primary/50 w-full max-w-2xl mx-4">
+    <PrelineModal
+      isOpen={isOpen}
+      onClose={onClose}
+      placement={0.1}
+      closeOnBackdrop
+    >
+      <PrelineModal.Body noPadding>
+        <div className="bg-bg-primary border border-border-primary rounded-lg">
           {/* Search Input */}
           <div className="flex items-center gap-3 p-4 border-b border-border-primary">
             <Search className="w-5 h-5 text-text-secondary" />
@@ -406,7 +412,7 @@ export default function CommandPalette({
             </div>
           )}
         </div>
-      </div>
-    </>
+      </PrelineModal.Body>
+    </PrelineModal>
   );
 }

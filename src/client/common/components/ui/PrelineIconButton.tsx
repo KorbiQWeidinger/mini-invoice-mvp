@@ -72,7 +72,7 @@ export const PrelineIconButton = forwardRef<
     ref
   ) => {
     const baseClasses =
-      "inline-flex items-center justify-center rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
+      "inline-flex items-center justify-center rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
     const variantClasses = getVariantClasses(variant);
     const sizeClasses = getSizeClasses(size);
     const iconSizeClasses = getIconSizeClasses(size);
@@ -82,6 +82,7 @@ export const PrelineIconButton = forwardRef<
     return (
       <button
         ref={ref}
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={buttonClasses}

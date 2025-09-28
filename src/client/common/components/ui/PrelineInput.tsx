@@ -56,15 +56,17 @@ function InputError({ error, inputId }: { error: string; inputId: string }) {
   );
 }
 
-function getInputClasses(error?: string) {
+function getInputClasses(error?: string, hasIcon?: boolean) {
   const baseClasses =
     "py-2 px-4 block w-full border rounded-lg text-sm focus:border-brand-primary focus:ring-brand-primary disabled:opacity-50 disabled:pointer-events-none bg-bg-primary text-text-primary placeholder-text-secondary";
 
+  const iconPadding = hasIcon ? "ps-10" : "";
+
   if (error) {
-    return `${baseClasses} border-error focus:border-error focus:ring-error`;
+    return `${baseClasses} ${iconPadding} border-error focus:border-error focus:ring-error`;
   }
 
-  return `${baseClasses} border-border-primary`;
+  return `${baseClasses} ${iconPadding} border-border-primary`;
 }
 
 export const PrelineInput = forwardRef<HTMLInputElement, PrelineInputProps>(
@@ -111,7 +113,7 @@ export const PrelineInput = forwardRef<HTMLInputElement, PrelineInputProps>(
             min={min}
             max={max}
             step={step}
-            className={getInputClasses(error)}
+            className={getInputClasses(error, !!icon)}
             aria-invalid={error ? "true" : "false"}
             aria-describedby={error ? `${inputId}-error` : undefined}
           />

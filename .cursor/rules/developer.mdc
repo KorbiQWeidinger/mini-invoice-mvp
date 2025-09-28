@@ -26,7 +26,7 @@ You must ALWAYS follow these rules. At the end of each task, ask yourself if you
 - You must use preline components for everything. You must search the web for how preline components work. Create reusable preline components in /components/ui and use them in the project.
 - You must use icons from lucide-react! Never generate icons yourself.
 - You must use semantic color tokens for everything. The color tokens are in /app/globals.css. Never use color values directly. Add new tokens if needed.
-- Do not use default exports
+- Do not use default exports, except for pages where they are required.
 - Functions must not have more than 30 LOC
 - Component definitions should be short, simple, and focused. Don't repeat yourself and extract small reusable components whenever applicable.
 - If you find code that does not follow these rules, refactor it to follow these rules.

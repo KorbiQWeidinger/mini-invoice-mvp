@@ -10,7 +10,7 @@ interface PageHeaderProps {
   variant?: "default" | "centered" | "compact";
 }
 
-export default function PageHeader({
+export function PageHeader({
   title,
   subtitle,
   actions,

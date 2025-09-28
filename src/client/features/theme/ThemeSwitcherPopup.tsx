@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { Sun, Moon, Coffee } from "lucide-react";
-import { useTheme } from "./ThemeProvider";
+import { useTheme, type Theme } from "./ThemeProvider";
+import { usePrelineReinit } from "@/client/common/hooks/usePrelineReinit";
 import { PrelineModal } from "@/client/common/components/ui/PrelineModal";
 
 interface ThemeSwitcherPopupProps {
@@ -10,34 +11,39 @@ interface ThemeSwitcherPopupProps {
   onClose: () => void;
 }
 
-export default function ThemeSwitcherPopup({
-  isOpen,
-  onClose,
-}: ThemeSwitcherPopupProps) {
-  const { theme, setTheme } = useTheme();
+interface ThemeOption {
+  value: string;
+  label: string;
+  icon: typeof Sun;
+  description: string;
+}
 
-  const themes = [
-    {
-      value: "light",
-      label: "Light",
-      icon: Sun,
-      description: "Clean and bright",
-    },
-    {
-      value: "coffee",
-      label: "Coffee",
-      icon: Coffee,
-      description: "Warm and cozy",
-    },
-    {
-      value: "dark",
-      label: "Dark",
-      icon: Moon,
-      description: "Easy on the eyes",
-    },
-  ] as const;
+const themes: ThemeOption[] = [
+  {
+    value: "light",
+    label: "Light",
+    icon: Sun,
+    description: "Clean and bright",
+  },
+  {
+    value: "coffee",
+    label: "Coffee",
+    icon: Coffee,
+    description: "Warm and cozy",
+  },
+  {
+    value: "dark",
+    label: "Dark",
+    icon: Moon,
+    description: "Easy on the eyes",
+  },
+];
 
-  // Handle keyboard navigation
+function useKeyboardNavigation(
+  isOpen: boolean,
+  onClose: () => void,
+  setTheme: (theme: Theme) => void
+) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isOpen) return;
@@ -47,15 +53,15 @@ export default function ThemeSwitcherPopup({
           onClose();
           break;
         case "1":
-          setTheme("light");
+          setTheme("light" as Theme);
           onClose();
           break;
         case "2":
-          setTheme("coffee");
+          setTheme("coffee" as Theme);
           onClose();
           break;
         case "3":
-          setTheme("dark");
+          setTheme("dark" as Theme);
           onClose();
           break;
       }
@@ -64,69 +70,89 @@ export default function ThemeSwitcherPopup({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose, setTheme]);
+}
+
+function ThemeOptionButton({
+  themeOption,
+  index,
+  isSelected,
+  onSelect,
+}: {
+  themeOption: ThemeOption;
+  index: number;
+  isSelected: boolean;
+  onSelect: () => void;
+}) {
+  const Icon = themeOption.icon;
 
   return (
-    <PrelineModal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Choose Theme"
-      size="md"
+    <button
+      onClick={onSelect}
+      className={`w-full flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
+        isSelected
+          ? "border-brand-primary bg-brand-primary/10"
+          : "border-border-primary hover:border-border-secondary hover:bg-bg-hover"
+      }`}
     >
-      <div className="space-y-3">
-        {themes.map((themeOption, index) => {
-          const Icon = themeOption.icon;
-          const isSelected = theme === themeOption.value;
+      <div
+        className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+          isSelected
+            ? "bg-brand-primary text-text-on-primary"
+            : "bg-bg-tertiary text-text-secondary"
+        }`}
+      >
+        <Icon className="w-4 h-4" />
+      </div>
+      <div className="flex-1 text-left">
+        <div className="flex items-center gap-2">
+          <h3 className="font-medium text-text-primary">{themeOption.label}</h3>
+          {isSelected && (
+            <span className="text-xs bg-brand-primary text-text-on-primary px-2 py-1 rounded-full">
+              Current
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-text-secondary">{themeOption.description}</p>
+      </div>
+      <div className="text-xs text-text-tertiary">{index + 1}</div>
+    </button>
+  );
+}
 
-          return (
-            <button
+export function ThemeSwitcherPopup({
+  isOpen,
+  onClose,
+}: ThemeSwitcherPopupProps) {
+  const { theme, setTheme } = useTheme();
+  usePrelineReinit();
+
+  useKeyboardNavigation(isOpen, onClose, setTheme);
+
+  return (
+    <PrelineModal isOpen={isOpen} onClose={onClose} placement="center">
+      <PrelineModal.Header title="Choose Theme" onClose={onClose} />
+      <PrelineModal.Body>
+        <div className="space-y-3">
+          {themes.map((themeOption, index) => (
+            <ThemeOptionButton
               key={themeOption.value}
-              onClick={() => {
-                setTheme(themeOption.value);
+              themeOption={themeOption}
+              index={index}
+              isSelected={theme === themeOption.value}
+              onSelect={() => {
+                setTheme(themeOption.value as Theme);
                 onClose();
               }}
-              className={`w-full flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
-                isSelected
-                  ? "border-brand-primary bg-brand-primary/10"
-                  : "border-border-primary hover:border-border-secondary hover:bg-bg-hover"
-              }`}
-            >
-              <div
-                className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
-                  isSelected
-                    ? "bg-brand-primary text-white"
-                    : "bg-bg-tertiary text-text-secondary"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-              </div>
-              <div className="flex-1 text-left">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-medium text-text-primary">
-                    {themeOption.label}
-                  </h3>
-                  {isSelected && (
-                    <span className="text-xs bg-brand-primary text-white px-2 py-1 rounded-full">
-                      Current
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-text-secondary">
-                  {themeOption.description}
-                </p>
-              </div>
-              <div className="text-xs text-text-tertiary">{index + 1}</div>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Footer */}
-      <div className="mt-6 pt-4 border-t border-border-primary">
-        <div className="flex items-center justify-between text-xs text-text-tertiary">
+            />
+          ))}
+        </div>
+      </PrelineModal.Body>
+      <PrelineModal.Footer>
+        <div className="flex items-center justify-between w-full text-xs text-text-tertiary">
           <span>Press 1, 2, or 3 to quickly select</span>
           <span>ESC to close</span>
         </div>
-      </div>
+      </PrelineModal.Footer>
     </PrelineModal>
   );
 }

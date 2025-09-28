@@ -98,7 +98,7 @@ export const PrelineButton = forwardRef<HTMLButtonElement, PrelineButtonProps>(
     ref
   ) => {
     const baseClasses =
-      "inline-flex items-center gap-x-2 font-semibold rounded-lg border focus:outline-none focus:ring-2 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200";
+      "inline-flex items-center gap-x-2 font-semibold rounded-lg border focus:outline-none focus:ring-2 disabled:opacity-50 disabled:pointer-events-none transition-colors duration-200 cursor-pointer";
     const variantClasses = getVariantClasses(variant);
     const sizeClasses = getSizeClasses(size);
     const iconSizeClasses = getIconSizeClasses(size);
