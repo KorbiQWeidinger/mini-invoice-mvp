@@ -66,6 +66,18 @@ export async function signUpWithGoogle() {
 
   const siteUrl = getSiteUrl();
 
+  console.log(
+    "siteUrl",
+    siteUrl,
+    "NEXT_PUBLIC_SITE_URL",
+    process.env.NEXT_PUBLIC_SITE_URL,
+    "VERCEL_URL",
+    process.env.VERCEL_URL
+  );
+
+  // sleep for 10 seconds
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
