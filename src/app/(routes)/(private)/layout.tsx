@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/client/features/theme/ThemeProvider";
 import { SettingsProvider } from "@/client/features/settings/SettingsProvider";
 import DockNavigation from "@/client/features/dock-navigation/DockNavigation";
 import { AppToolbar } from "@/client/common/components/AppToolbar";
+import { OrgProvider } from "@/client/features/orgs/OrgProvider";
 import { createServerClient } from "@/server/supabase/createServerClient";
 import { redirect } from "next/navigation";
 
@@ -42,12 +43,14 @@ export default async function PrivateLayout({
       >
         <ThemeProvider>
           <SettingsProvider>
+            <OrgProvider>
             <div className="min-h-screen bg-bg-primary">
               <AppToolbar />
               <main className="pb-20">{children}</main>
               <DockNavigation />
             </div>
             <PrelineScript />
+            </OrgProvider>
           </SettingsProvider>
         </ThemeProvider>
       </body>

@@ -15,13 +15,19 @@ export type InvoiceItemUpdate =
 // Invoice operations
 export const invoiceService = {
   // Get all invoices for the authenticated user
-  async getAll() {
+  async getAll(params?: { organizationId?: string }) {
     const supabase = await createServerClient();
-    const { data, error } = await supabase
+    let query = supabase
       .from("invoices")
       .select("*")
       .order("created_at", { ascending: false })
-      .abortSignal(AbortSignal.timeout(10000)); // Add timeout to prevent hanging
+      .abortSignal(AbortSignal.timeout(10000));
+
+    if (params?.organizationId) {
+      query = query.eq("organization_id", params.organizationId);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return data;
@@ -81,15 +87,21 @@ export const invoiceService = {
   },
 
   // Search invoices for the authenticated user
-  async search(query: string) {
+  async search(query: string, params?: { organizationId?: string }) {
     const supabase = await createServerClient();
-    const { data, error } = await supabase
+    let q = supabase
       .from("invoices")
       .select("*")
       .or(
         `invoice_number.ilike.%${query}%,customer_name.ilike.%${query}%,customer_email.ilike.%${query}%`
       )
       .order("created_at", { ascending: false });
+
+    if (params?.organizationId) {
+      q = q.eq("organization_id", params.organizationId);
+    }
+
+    const { data, error } = await q;
 
     if (error) throw error;
     return data;

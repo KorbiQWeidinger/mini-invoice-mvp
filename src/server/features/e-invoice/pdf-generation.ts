@@ -1,5 +1,6 @@
 import { PDFDocument, PDFPage, PDFFont, rgb, StandardFonts } from "pdf-lib";
 import { type Invoice, type InvoiceItem } from "@/db/database";
+import { createServerClient } from "@/server/supabase/createServerClient";
 
 export interface PDFGenerationOptions {
   fontSize?: number;
@@ -59,8 +60,22 @@ export const createPDFHeader = async (
 
   let yPosition = height - options.margin!;
 
+  // Load organization for header
+  let orgName = "Your Company Name";
+  try {
+    if (invoice.organization_id) {
+      const supabase = await createServerClient();
+      const { data } = await supabase
+        .from("organizations")
+        .select("name")
+        .eq("id", invoice.organization_id)
+        .maybeSingle();
+      orgName = data?.name ?? orgName;
+    }
+  } catch {}
+
   // Company header
-  page.drawText("Your Company Name", {
+  page.drawText(orgName, {
     x: options.margin!,
     y: yPosition,
     size: options.headerFontSize!,
