@@ -52,7 +52,7 @@ export const DangerZone = () => {
             </p>
           </div>
           <PrelineButton variant="danger" size="sm">
-            Delete Account
+            Delete
           </PrelineButton>
         </div>
       </div>
