@@ -1,14 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Settings, CreditCard } from "lucide-react";
+import { Settings, CreditCard, Users, Link2 } from "lucide-react";
 import { PrelineCard } from "@/client/common/components/ui/PrelineCard";
+import { PrelineInput } from "@/client/common/components/ui/PrelineInput";
+import { PrelineButton } from "@/client/common/components/ui/PrelineButton";
 import { invoiceApiService } from "@/client/api/invoices";
 import type { Invoice } from "@/db/database";
+import { useOrg } from "@/client/features/orgs/OrgProvider";
+import { orgApi } from "@/client/api/orgs";
 
 export const AccountSections = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
+  const { organizations, currentOrgId, refresh } = useOrg();
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteLoading, setInviteLoading] = useState(false);
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -51,6 +58,19 @@ export const AccountSections = () => {
       ],
     },
     {
+      title: "Organization Members",
+      icon: Users,
+      items: [
+        { label: "Orgs", value: organizations.map((o) => o.name).join(", ") || "None" },
+        { label: "Current Org", value: organizations.find((o) => o.id === currentOrgId)?.name || "Not selected" },
+      ],
+    },
+    {
+      title: "Invite Member",
+      icon: Link2,
+      items: [],
+    },
+    {
       title: "Statistics",
       icon: CreditCard,
       items: [
@@ -82,18 +102,46 @@ export const AccountSections = () => {
             iconColor="primary"
             variant="outlined"
           >
-            <div className="space-y-3">
-              {section.items.map((item, index) => (
-                <div key={index} className="flex justify-between items-center">
-                  <span className="text-sm text-text-secondary">
-                    {item.label}
-                  </span>
-                  <span className="text-sm font-medium text-text-primary">
-                    {item.value}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {section.title === "Invite Member" ? (
+              <div className="space-y-3">
+                <PrelineInput
+                  type="email"
+                  label="Email"
+                  value={inviteEmail}
+                  onChange={setInviteEmail}
+                />
+                <PrelineButton
+                  onClick={async () => {
+                    if (!currentOrgId || !inviteEmail) return;
+                    try {
+                      setInviteLoading(true);
+                      await orgApi.invite({ organization_id: currentOrgId, email: inviteEmail, role: 'member' });
+                      setInviteEmail("");
+                      await refresh();
+                      alert("Invite created. Share the link from your database or email workflow.");
+                    } finally {
+                      setInviteLoading(false);
+                    }
+                  }}
+                  loading={inviteLoading}
+                >
+                  Send Invite
+                </PrelineButton>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {section.items.map((item, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <span className="text-sm text-text-secondary">
+                      {item.label}
+                    </span>
+                    <span className="text-sm font-medium text-text-primary">
+                      {item.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </PrelineCard>
         );
       })}

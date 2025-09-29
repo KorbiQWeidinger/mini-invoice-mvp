@@ -106,7 +106,7 @@ export class PDFService {
 
     // Company information footer
     const footerText =
-      "Your Company Name | Musterstraße 123, 12345 Musterstadt | Tel: +49 123 456789 | E-Mail: info@company.com";
+      "Generated via Invoice Buddy";
     const textWidth = font.widthOfTextAtSize(footerText, 8);
 
     page.drawText(footerText, {

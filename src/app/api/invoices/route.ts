@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { invoiceService } from "@/db/database";
+import { getCurrentOrgIdFromRequest } from "@/server/orgs/current-org";
 
 // Disable caching for API routes
 export const dynamic = "force-dynamic";
@@ -10,12 +11,13 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q");
+    const organizationId = await getCurrentOrgIdFromRequest(request);
 
     let invoices;
     if (query) {
-      invoices = await invoiceService.search(query);
+      invoices = await invoiceService.search(query, { organizationId });
     } else {
-      invoices = await invoiceService.getAll();
+      invoices = await invoiceService.getAll({ organizationId });
     }
 
     // Add cache-busting headers
@@ -43,9 +45,12 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { items, ...invoiceData } = body;
+    const organizationId = await getCurrentOrgIdFromRequest(request);
+
+    const payload = { ...invoiceData, organization_id: organizationId } as any;
 
     // Create invoice
-    const invoice = await invoiceService.create(invoiceData);
+    const invoice = await invoiceService.create(payload);
 
     // Create invoice items if provided
     if (items && Array.isArray(items)) {

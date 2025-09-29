@@ -19,6 +19,7 @@ import type {
   DataTableAction,
 } from "@/client/common/components/ui/DataTable/types";
 import { InvoiceView } from "./InvoiceView";
+import { useOrg } from "@/client/features/orgs/OrgProvider";
 
 interface InvoiceEditorProps {
   initialInvoice?: Partial<InvoiceInsert>;
@@ -52,6 +53,7 @@ export function InvoiceEditor({
   loading = false,
   submitLabel = "Create Invoice",
 }: InvoiceEditorProps) {
+  const { currentOrgId } = useOrg();
   // Generate stable values for preview to avoid hydration issues
   const [previewInvoiceNumber] = useState(() => `INV-PREVIEW`);
   const [previewDate] = useState(() => new Date().toISOString().split("T")[0]);
@@ -172,6 +174,7 @@ export function InvoiceEditor({
       tax_amount: invoice.tax_amount || 0,
       total_amount: invoice.total_amount || 0,
       notes: invoice.notes || null,
+      organization_id: currentOrgId || undefined,
     };
 
     const itemsData: InvoiceItemInsert[] = items

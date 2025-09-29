@@ -1,4 +1,5 @@
 import { invoiceService } from "@/db/database";
+import { getCurrentOrgIdFromCookies } from "@/server/orgs/current-org";
 import InvoicesDataTable from "@/client/features/invoice/InvoicesDataTable";
 import { Plus } from "lucide-react";
 import { PageHeader } from "@/client/common/components/PageHeader";
@@ -10,7 +11,8 @@ export const revalidate = 0;
 
 export default async function InvoicesPage() {
   // Force fresh data by disabling cache
-  const invoices = await invoiceService.getAll();
+  const organizationId = await getCurrentOrgIdFromCookies();
+  const invoices = await invoiceService.getAll({ organizationId: organizationId ?? undefined });
 
   return (
     <div className="p-6">

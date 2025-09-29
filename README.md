@@ -59,6 +59,27 @@ npx supabase init
 npx supabase db push
 ```
 
+### Organizations & Multi-tenant Invoices
+
+Apply migrations in this order inside Supabase SQL editor:
+
+1. `supabase/migrations/001_initial_schema.sql`
+2. `supabase/migrations/002_add_user_authentication.sql`
+3. `supabase/migrations/003_organizations.sql`
+4. `supabase/migrations/004_invoices_org_id.sql`
+
+Key objects:
+
+- Tables: `organizations`, `organization_members`, `organization_invites`
+- RPCs: `create_organization(name, slug, ...)`, `accept_organization_invite(token)`
+- Invoices now include `organization_id` and org-based RLS policies.
+
+Runtime behavior:
+
+- Toolbar org switcher sets a cookie used by invoice APIs to scope queries.
+- Account page exposes basic org info and a simple invite flow.
+- PDF export header shows the organization name.
+
 ### 4. Run Development Server
 
 ```bash

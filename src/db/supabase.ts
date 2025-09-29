@@ -13,6 +13,7 @@ export interface Database {
         Row: {
           id: string;
           user_id: string;
+          organization_id: string | null;
           invoice_number: string;
           customer_name: string;
           customer_email: string | null;
@@ -31,6 +32,7 @@ export interface Database {
         Insert: {
           id?: string;
           user_id?: string;
+          organization_id?: string | null;
           invoice_number: string;
           customer_name: string;
           customer_email?: string | null;
@@ -49,6 +51,7 @@ export interface Database {
         Update: {
           id?: string;
           user_id?: string;
+          organization_id?: string | null;
           invoice_number?: string;
           customer_name?: string;
           customer_email?: string | null;
@@ -70,6 +73,7 @@ export interface Database {
           id: string;
           invoice_id: string;
           user_id: string;
+          organization_id: string | null;
           description: string;
           quantity: number;
           unit_price: number;
@@ -80,6 +84,7 @@ export interface Database {
           id?: string;
           invoice_id: string;
           user_id?: string;
+          organization_id?: string | null;
           description: string;
           quantity?: number;
           unit_price: number;
@@ -90,10 +95,101 @@ export interface Database {
           id?: string;
           invoice_id?: string;
           user_id?: string;
+          organization_id?: string | null;
           description?: string;
           quantity?: number;
           unit_price?: number;
           line_total?: number;
+          created_at?: string;
+        };
+      };
+      organizations: {
+        Row: {
+          id: string;
+          name: string;
+          slug: string;
+          billing_email: string | null;
+          address: string | null;
+          tax_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          slug: string;
+          billing_email?: string | null;
+          address?: string | null;
+          tax_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          slug?: string;
+          billing_email?: string | null;
+          address?: string | null;
+          tax_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      organization_members: {
+        Row: {
+          id: string;
+          organization_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'member';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          user_id: string;
+          role: 'owner' | 'admin' | 'member';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          user_id?: string;
+          role?: 'owner' | 'admin' | 'member';
+          created_at?: string;
+        };
+      };
+      organization_invites: {
+        Row: {
+          id: string;
+          organization_id: string;
+          email: string;
+          role: 'owner' | 'admin' | 'member';
+          token: string;
+          invited_by: string | null;
+          accepted_at: string | null;
+          expires_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          email: string;
+          role: 'owner' | 'admin' | 'member';
+          token?: string;
+          invited_by: string;
+          accepted_at?: string | null;
+          expires_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          email?: string;
+          role?: 'owner' | 'admin' | 'member';
+          token?: string;
+          invited_by?: string | null;
+          accepted_at?: string | null;
+          expires_at?: string;
           created_at?: string;
         };
       };
