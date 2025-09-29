@@ -123,14 +123,20 @@ export default function InvoicesDataTable({
       sortable: true,
       searchable: true,
       render: (invoice: Invoice) => (
-        <div>
-          <div className="text-sm text-text-primary font-medium">
-            {invoice.customer_name}
-          </div>
-          <div className="text-sm text-text-secondary">
-            {invoice.customer_email}
-          </div>
-        </div>
+        <span className="text-sm text-text-primary font-medium">
+          {invoice.customer_name}
+        </span>
+      ),
+    },
+    {
+      key: "customer_email",
+      header: "Email",
+      sortable: true,
+      searchable: true,
+      render: (invoice: Invoice) => (
+        <span className="text-sm text-text-secondary">
+          {invoice.customer_email}
+        </span>
       ),
     },
     {

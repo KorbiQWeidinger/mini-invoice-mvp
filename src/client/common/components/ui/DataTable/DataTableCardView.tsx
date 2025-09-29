@@ -36,13 +36,16 @@ export function DataTableCardView<T extends Record<string, unknown>>({
         <PrelineCard key={index} variant="elevated" hover>
           <div className="space-y-4">
             {/* Main content */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {columns.map((column, colIndex) => (
-                <div key={colIndex} className="space-y-1">
+                <div
+                  key={colIndex}
+                  className="flex items-center justify-between"
+                >
                   <div className="text-xs font-medium text-text-secondary uppercase tracking-wider">
                     {column.header}
                   </div>
-                  <div className="text-sm text-text-primary">
+                  <div className="text-sm text-text-primary font-medium">
                     {column.render
                       ? column.render(row)
                       : String(row[column.key as keyof T] || "")}
