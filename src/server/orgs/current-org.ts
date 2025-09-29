@@ -1,10 +1,10 @@
-import { NextRequest, cookies } from "next/headers";
+import { cookies } from "next/headers";
 
 const ORG_COOKIE = "current_org_id";
 
-export async function getCurrentOrgIdFromRequest(_req: NextRequest) {
+export async function getCurrentOrgIdFromRequest(_req: unknown) {
   try {
-    const jar = await cookies();
+    const jar = cookies();
     const cookie = jar.get(ORG_COOKIE);
     return cookie?.value ?? null;
   } catch {
@@ -13,13 +13,13 @@ export async function getCurrentOrgIdFromRequest(_req: NextRequest) {
 }
 
 export async function getCurrentOrgIdFromCookies() {
-  const jar = await cookies();
+  const jar = cookies();
   const cookie = jar.get(ORG_COOKIE);
   return cookie?.value ?? null;
 }
 
 export async function setCurrentOrgIdCookie(orgId: string | null) {
-  const jar = await cookies();
+  const jar = cookies();
   if (orgId) {
     jar.set(ORG_COOKIE, orgId, {
       path: "/",
